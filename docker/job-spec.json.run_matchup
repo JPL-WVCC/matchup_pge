@@ -1,0 +1,20 @@
+{
+  "command":"/home/ops/matchup_pge/run_matchup.sh",
+  "imported_worker_files":{"/home/ops/.netrc":"/home/ops/.netrc"},
+  "recommended-queues":[
+    "pleiades_job_worker-small"
+  ],
+  "disk_usage":"5GB",
+  "soft_time_limit": 10000,
+  "time_limit": 10000,
+  "params" : [
+    {
+    "name": "start_time",
+    "destination": "positional"
+    },
+    {
+    "name": "end_time",
+    "destination": "positional"
+    }
+  ]
+}
