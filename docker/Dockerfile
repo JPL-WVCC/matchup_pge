@@ -12,7 +12,7 @@ RUN set -ex \
  && conda install pykdtree \
  && conda install h5py \
  && cd /tmp \
- && git clone git@github.jpl.nasa.gov:leipan/CrIS_VIIRS_collocation-master.git \
+ && git clone git@github.com:leipan/CrIS_VIIRS_collocation-master.git \
  && mv CrIS_VIIRS_collocation-master /home/ops
 
 # set entrypoint
