@@ -5,7 +5,7 @@ LABEL description="wvcc CrIS VIIRS matchup PGE container"
 
 USER ops
 COPY . /home/ops/matchup_pge
-COPY /tmp/data /tmp/
+### COPY /tmp/data /tmp/
 RUN set -ex \
  && conda install numpy \
  && conda install netCDF4 \
