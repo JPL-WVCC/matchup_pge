@@ -15,7 +15,7 @@ COPY . /home/ops/matchup_pge
 ### COPY /tmp/data /tmp/
 RUN set -ex \
  && cd /tmp \
- && git clone git@github.com:leipan/CrIS_VIIRS_collocation-master.git \
+ && git clone https://github.com/leipan/CrIS_VIIRS_collocation-master.git \
  && mv CrIS_VIIRS_collocation-master /home/ops
 
 # set entrypoint
