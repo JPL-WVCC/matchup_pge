@@ -4,7 +4,8 @@ MAINTAINER leipan "leipan@jpl.nasa.gov"
 LABEL description="wvcc CrIS VIIRS matchup PGE container"
 
 ### USER root
-RUN source /opt/conda/bin/activate root \
+### RUN source /opt/conda/bin/activate root \
+RUN source /opt/conda/bin/activate ops \
  && conda install numpy \
  && conda install netCDF4 \
  && conda install pykdtree \
