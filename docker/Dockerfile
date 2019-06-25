@@ -3,7 +3,7 @@ FROM hysds/pge-base
 MAINTAINER leipan "leipan@jpl.nasa.gov"
 LABEL description="wvcc CrIS VIIRS matchup PGE container"
 
-USER root
+### USER root
 RUN source /opt/conda/bin/activate root \
  && conda install numpy \
  && conda install netCDF4 \
