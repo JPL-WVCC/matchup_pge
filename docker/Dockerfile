@@ -16,7 +16,7 @@ COPY . /home/ops/matchup_pge
 RUN set -ex \
  && cd /tmp \
  && git clone https://github.com/leipan/CrIS_VIIRS_collocation-master.git \
- && mv CrIS_VIIRS_collocation-master /home/ops/matchup_pge/
+ && mv CrIS_VIIRS_collocation-master /home/ops/matchup_pge
 
 # set entrypoint
 WORKDIR /home/ops
