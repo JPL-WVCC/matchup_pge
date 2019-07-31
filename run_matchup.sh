@@ -8,7 +8,7 @@ source $HOME/verdi/bin/activate
 echo "##########################################" 1>&2
 echo -n "Running WVCC matchup: " 1>&2
 date 1>&2
-python $BASE_PATH/CrIS_VIIRS_collocation-master/code_test.py > code_test.log 2>&1
+python $BASE_PATH/../CrIS_VIIRS_collocation-master/code_test.py > code_test.log 2>&1
 STATUS=$?
 echo -n "Finished running WVCC matchup: " 1>&2
 date 1>&2
