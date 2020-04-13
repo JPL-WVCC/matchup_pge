@@ -2,6 +2,8 @@ import glob
 import time
 import os,sys
 import shutil
+import netCDF4 as nc4
+import json
 
 # --------------------------------------
 def create_dataset(files):
@@ -14,12 +16,24 @@ def create_dataset(files):
     os.mkdir(dir1)
     shutil.copyfile(f1, dir1+'/'+dir1+ext)
 
+    ### print ('f1: ', f1)
+    f = nc4.Dataset(f1,'r')
+    ### print (f.time_coverage_start)
+    ### print (f.time_coverage_end)
+    ### print (f.geospatial_bounds)
+
     # create minimal dataset JSON file
     dataset_json_file = dir1+'/'+dir1+'.dataset.json'
-    d_file = open(dataset_json_file, 'w')
-    d_file.write('{"version": "v1.0"}')
-    d_file.write('\n')
-    d_file.close()
+
+    dataset_dict = {"version": "v1.0",
+                    "starttime": f.time_coverage_start,
+                    "endtime": f.time_coverage_end,
+                   }
+
+    json_object = json.dumps(dataset_dict, indent = 4) 
+
+    with open(dataset_json_file, "w") as outfile: 
+      outfile.write(json_object)
 
     # create minimal metadata file
     metadata_json_file=dir1+'/'+dir1+'.met.json'
