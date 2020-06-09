@@ -1,0 +1,865 @@
+{
+"_index": "grq_v2.0.0_s1-gunw-ifg-cfg",
+"_type": "S1-GUNW-ifg-cfg",
+"_id": "S1-GUNW-ifg-cfg-RM-M1S2-TN077-20181212T231350-20181118T231324-poeorb-4df5",
+"_version": 2,
+"_score": 1,
+"_source": {
+"objectid": "S1-GUNW-ifg-cfg-RM-M1S2-TN077-20181212T231350-20181118T231324-poeorb-4df5",
+"dataset": "S1-GUNW-ifg-cfg",
+"images": [ ],
+"continent": "North America",
+"id": "S1-GUNW-ifg-cfg-RM-M1S2-TN077-20181212T231350-20181118T231324-poeorb-4df5",
+"city": [
+{
+"admin2_code": "019",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2011-05-14",
+"geonameid": "4586615",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.08822,
+"lon": -79.46117
+},
+"latitude": 33.08822,
+"alternatename": [ ],
+"elevation": 1,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "McClellanville",
+"admin4_code": null,
+"population": 499,
+"name": "McClellanville",
+"admin2_name": "Charleston County",
+"longitude": -79.46117,
+"dem": "6",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "043",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4579225",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.336,
+"lon": -79.23755
+},
+"latitude": 33.336,
+"alternatename": [ ],
+"elevation": 4,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Friendfield",
+"admin4_code": null,
+"population": 0,
+"name": "Friendfield",
+"admin2_name": "Georgetown County",
+"longitude": -79.23755,
+"dem": "14",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "015",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4592018",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.27461,
+"lon": -79.58118
+},
+"latitude": 33.27461,
+"alternatename": [ ],
+"elevation": 4,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Price Landing",
+"admin4_code": null,
+"population": 0,
+"name": "Price Landing",
+"admin2_name": "Berkeley County",
+"longitude": -79.58118,
+"dem": "4",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "043",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4592246",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.22961,
+"lon": -79.20421
+},
+"latitude": 33.22961,
+"alternatename": [ ],
+"elevation": 3,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Quarantine",
+"admin4_code": null,
+"population": 0,
+"name": "Quarantine",
+"admin2_name": "Georgetown County",
+"longitude": -79.20421,
+"dem": "2",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "015",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4591597",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.24517,
+"lon": -79.5209
+},
+"latitude": 33.24517,
+"alternatename": [ ],
+"elevation": 6,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Pleasant Hill Landing",
+"admin4_code": null,
+"population": 0,
+"name": "Pleasant Hill Landing",
+"admin2_name": "Berkeley County",
+"longitude": -79.5209,
+"dem": "4",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "043",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4573033",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.30517,
+"lon": -79.2131
+},
+"latitude": 33.30517,
+"alternatename": [ ],
+"elevation": 1,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Caines",
+"admin4_code": null,
+"population": 0,
+"name": "Caines",
+"admin2_name": "Georgetown County",
+"longitude": -79.2131,
+"dem": "0",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "043",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4570510",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.30017,
+"lon": -79.30033
+},
+"latitude": 33.30017,
+"alternatename": [ ],
+"elevation": 6,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Belle Isle Estates",
+"admin4_code": null,
+"population": 0,
+"name": "Belle Isle Estates",
+"admin2_name": "Georgetown County",
+"longitude": -79.30033,
+"dem": "12",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "019",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4597108",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.1735,
+"lon": -79.41756
+},
+"latitude": 33.1735,
+"alternatename": [ ],
+"elevation": 6,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "South Santee",
+"admin4_code": null,
+"population": 0,
+"name": "South Santee",
+"admin2_name": "Charleston County",
+"longitude": -79.41756,
+"dem": "14",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "019",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4598555",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.12711,
+"lon": -79.58451
+},
+"latitude": 33.12711,
+"alternatename": [ ],
+"elevation": 7,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Thompson Corner",
+"admin4_code": null,
+"population": 0,
+"name": "Thompson Corner",
+"admin2_name": "Charleston County",
+"longitude": -79.58451,
+"dem": "16",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "019",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4600076",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.19545,
+"lon": -79.46312
+},
+"latitude": 33.19545,
+"alternatename": [ ],
+"elevation": 6,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Wambaw Corner",
+"admin4_code": null,
+"population": 0,
+"name": "Wambaw Corner",
+"admin2_name": "Charleston County",
+"longitude": -79.46312,
+"dem": "14",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "019",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4584714",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.05406,
+"lon": -79.5484
+},
+"latitude": 33.05406,
+"alternatename": [ ],
+"elevation": 5,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Laurel Hill Plantation",
+"admin4_code": null,
+"population": 0,
+"name": "Laurel Hill Plantation",
+"admin2_name": "Charleston County",
+"longitude": -79.5484,
+"dem": "9",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "043",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4589480",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.23017,
+"lon": -79.37672
+},
+"latitude": 33.23017,
+"alternatename": [ ],
+"elevation": 6,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "North Santee",
+"admin4_code": null,
+"population": 0,
+"name": "North Santee",
+"admin2_name": "Georgetown County",
+"longitude": -79.37672,
+"dem": "15",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "043",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4576069",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.216,
+"lon": -79.39006
+},
+"latitude": 33.216,
+"alternatename": [ ],
+"elevation": 5,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Crow Hill",
+"admin4_code": null,
+"population": 0,
+"name": "Crow Hill",
+"admin2_name": "Georgetown County",
+"longitude": -79.39006,
+"dem": "11",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "043",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4576425",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.36906,
+"lon": -79.15171
+},
+"latitude": 33.36906,
+"alternatename": [ ],
+"elevation": 1,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "DeBordieu",
+"admin4_code": null,
+"population": 0,
+"name": "DeBordieu",
+"admin2_name": "Georgetown County",
+"longitude": -79.15171,
+"dem": "-5",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "015",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4582162",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.19045,
+"lon": -79.57562
+},
+"latitude": 33.19045,
+"alternatename": [ ],
+"elevation": 12,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Honey Hill",
+"admin4_code": null,
+"population": 0,
+"name": "Honey Hill",
+"admin2_name": "Berkeley County",
+"longitude": -79.57562,
+"dem": "16",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "043",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4579013",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.32072,
+"lon": -79.42478
+},
+"latitude": 33.32072,
+"alternatename": [ ],
+"elevation": 5,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Foster Corner",
+"admin4_code": null,
+"population": 0,
+"name": "Foster Corner",
+"admin2_name": "Georgetown County",
+"longitude": -79.42478,
+"dem": "6",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "019",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4575251",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.15739,
+"lon": -79.41062
+},
+"latitude": 33.15739,
+"alternatename": [ ],
+"elevation": 6,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Collins Creek",
+"admin4_code": null,
+"population": 0,
+"name": "Collins Creek",
+"admin2_name": "Charleston County",
+"longitude": -79.41062,
+"dem": "10",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "043",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4576564",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.3035,
+"lon": -79.23449
+},
+"latitude": 33.3035,
+"alternatename": [ ],
+"elevation": 1,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Denny Corner",
+"admin4_code": null,
+"population": 0,
+"name": "Denny Corner",
+"admin2_name": "Georgetown County",
+"longitude": -79.23449,
+"dem": "8",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "019",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4572625",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.05323,
+"lon": -79.55979
+},
+"latitude": 33.05323,
+"alternatename": [ ],
+"elevation": 6,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Buck Hall",
+"admin4_code": null,
+"population": 0,
+"name": "Buck Hall",
+"admin2_name": "Charleston County",
+"longitude": -79.55979,
+"dem": "12",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+,
+{
+"admin2_code": "043",
+"country_code": "US",
+"admin1_name": "South Carolina",
+"timezone": "America/New_York",
+"modification_date": "2006-01-15",
+"geonameid": "4570511",
+"feature_class": "P",
+"admin3_code": null,
+"cc2": [ ],
+"location": {
+"lat": 33.3035,
+"lon": -79.29922
+},
+"latitude": 33.3035,
+"alternatename": [ ],
+"elevation": 4,
+"continent_code": "NA",
+"country_name": "United States",
+"feature_code": "PPL",
+"asciiname": "Belle Isle Gardens",
+"admin4_code": null,
+"population": 0,
+"name": "Belle Isle Gardens",
+"admin2_name": "Georgetown County",
+"longitude": -79.29922,
+"dem": "8",
+"continent_name": "North America",
+"admin1_code": "SC"
+}
+],
+"prov": { },
+"label": "S1-GUNW-ifg-cfg-RM-M1S2-TN077-20181212T231350-20181118T231324-poeorb-4df5",
+"ipath": "ariamh::data/S1-GUNW-ifg-cfg",
+"dataset_level": "l1",
+"version": "v2.0.0",
+"location": {
+"type": "Polygon",
+"coordinates": [
+[
+[
+-79.633308
+,
+33.300335
+]
+,
+[
+-76.92088028526656
+,
+33.70589080463074
+]
+,
+[
+-76.894287
+,
+33.572914
+]
+,
+[
+-76.89458387128131
+,
+33.57286952542511
+]
+,
+[
+-76.59819
+,
+32.079208
+]
+,
+[
+-79.25936942292059
+,
+31.671526171312866
+]
+,
+[
+-79.633308
+,
+33.300335
+]
+]
+]
+},
+"creation_timestamp": "2019-05-30T21:39:56.666998Z",
+"metadata": {
+"full_id_hash": "4df520dc766e8bdba08a6713307e17d6",
+"time_limit": 86700,
+"slave_orbit_file": "S1A_OPER_AUX_POEORB_OPOD_20181208T120738_V20181117T225942_20181119T005942.EOF",
+"localize_urls": [
+{
+"url": "http://aria-dev-lts-fwd-torresal.s3-website-us-west-2.amazonaws.com/datasets/ancillary/v1.1/2019/01/01/S1A_OPER_AUX_POEORB_OPOD_20190101T120738_V20181211T225942_20181213T005942-v1.1/S1A_OPER_AUX_POEORB_OPOD_20190101T120738_V20181211T225942_20181213T005942.EOF"
+}
+,
+{
+"url": "http://aria-dev-lts-fwd-torresal.s3-website-us-west-2.amazonaws.com/datasets/ancillary/v1.1/2018/12/08/S1A_OPER_AUX_POEORB_OPOD_20181208T120738_V20181117T225942_20181119T005942-v1.1/S1A_OPER_AUX_POEORB_OPOD_20181208T120738_V20181117T225942_20181119T005942.EOF"
+}
+,
+{
+"url": "s3://s3-us-west-2.amazonaws.com:80/aria-dev-lts-fwd-torresal/datasets/slc/v1.1/2018/12/12/S1A_IW_SLC__1SDV_20181212T231323_20181212T231350_024999_02C1A6_084A/S1A_IW_SLC__1SDV_20181212T231323_20181212T231350_024999_02C1A6_084A.zip"
+}
+,
+{
+"url": "s3://s3-us-west-2.amazonaws.com:80/aria-dev-lts-fwd-torresal/datasets/slc/v1.1/2018/11/18/S1A_IW_SLC__1SDV_20181118T231324_20181118T231351_024649_02B55C_85F4/S1A_IW_SLC__1SDV_20181118T231324_20181118T231351_024649_02B55C_85F4.zip"
+}
+,
+{
+"url": "s3://s3-us-west-2.amazonaws.com:80/aria-dev-lts-fwd-torresal/datasets/slc/v1.1/2018/11/18/S1A_IW_SLC__1SDV_20181118T231349_20181118T231416_024649_02B55C_1309/S1A_IW_SLC__1SDV_20181118T231349_20181118T231416_024649_02B55C_1309.zip"
+}
+],
+"slave_orbit_url": "http://aria-dev-lts-fwd-torresal.s3-website-us-west-2.amazonaws.com/datasets/ancillary/v1.1/2018/12/08/S1A_OPER_AUX_POEORB_OPOD_20181208T120738_V20181117T225942_20181119T005942-v1.1/S1A_OPER_AUX_POEORB_OPOD_20181208T120738_V20181117T225942_20181119T005942.EOF",
+"slave_zip_url": [
+"s3://s3-us-west-2.amazonaws.com:80/aria-dev-lts-fwd-torresal/datasets/slc/v1.1/2018/11/18/S1A_IW_SLC__1SDV_20181118T231324_20181118T231351_024649_02B55C_85F4/S1A_IW_SLC__1SDV_20181118T231324_20181118T231351_024649_02B55C_85F4.zip"
+,
+"s3://s3-us-west-2.amazonaws.com:80/aria-dev-lts-fwd-torresal/datasets/slc/v1.1/2018/11/18/S1A_IW_SLC__1SDV_20181118T231349_20181118T231416_024649_02B55C_1309/S1A_IW_SLC__1SDV_20181118T231349_20181118T231416_024649_02B55C_1309.zip"
+],
+"union_geojson": {
+"type": "Polygon",
+"coordinates": [
+[
+[
+-79.633308
+,
+33.300335
+]
+,
+[
+-76.92088028526656
+,
+33.70589080463074
+]
+,
+[
+-76.894287
+,
+33.572914
+]
+,
+[
+-76.89458387128131
+,
+33.57286952542511
+]
+,
+[
+-76.59819
+,
+32.079208
+]
+,
+[
+-79.25936942292059
+,
+31.671526171312866
+]
+,
+[
+-79.633308
+,
+33.300335
+]
+]
+]
+},
+"id": "S1-GUNW-ifg-cfg-RM-M1S2-TN077-20181212T231350-20181118T231324-poeorb-4df5",
+"_disk_usage": "100GB",
+"master_orbit_url": "http://aria-dev-lts-fwd-torresal.s3-website-us-west-2.amazonaws.com/datasets/ancillary/v1.1/2019/01/01/S1A_OPER_AUX_POEORB_OPOD_20190101T120738_V20181211T225942_20181213T005942-v1.1/S1A_OPER_AUX_POEORB_OPOD_20190101T120738_V20181211T225942_20181213T005942.EOF",
+"master_zip_url": [
+"s3://s3-us-west-2.amazonaws.com:80/aria-dev-lts-fwd-torresal/datasets/slc/v1.1/2018/12/12/S1A_IW_SLC__1SDV_20181212T231323_20181212T231350_024999_02C1A6_084A/S1A_IW_SLC__1SDV_20181212T231323_20181212T231350_024999_02C1A6_084A.zip"
+],
+"master_scenes": [
+"S1A_IW_SLC__1SDV_20181212T231323_20181212T231350_024999_02C1A6_084A"
+],
+"slc_master_dt": "20181212T231350",
+"priority": 5,
+"platform": "Sentinel-1A",
+"master_zip_file": [
+"S1A_IW_SLC__1SDV_20181212T231323_20181212T231350_024999_02C1A6_084A.zip"
+],
+"id_hash": "4df5",
+"range_looks": 7,
+"soft_time_limit": 86400,
+"azimuth_looks": 19,
+"auto_bbox": "true",
+"direction": "asc",
+"context": { },
+"master_acquisitions": [
+"acquisition-Sentinel-1A_20181212T231323.739Z_77_IW-esa_scihub"
+],
+"dem_type": "Ned1",
+"bbox": [
+[
+33.70589080463074
+,
+-79.633308
+]
+,
+[
+33.70589080463074
+,
+-76.59819
+]
+,
+[
+31.671526171312866
+,
+-76.59819
+]
+,
+[
+31.671526171312866
+,
+-79.633308
+]
+],
+"filter_strength": 0.5,
+"endtime": "2018-12-12T23:13:50",
+"precise_orbit_only": "true",
+"slave_zip_file": [
+"S1A_IW_SLC__1SDV_20181118T231324_20181118T231351_024649_02B55C_85F4.zip"
+,
+"S1A_IW_SLC__1SDV_20181118T231349_20181118T231416_024649_02B55C_1309.zip"
+],
+"slave_scenes": [
+"S1A_IW_SLC__1SDV_20181118T231324_20181118T231351_024649_02B55C_85F4"
+,
+"S1A_IW_SLC__1SDV_20181118T231349_20181118T231416_024649_02B55C_1309"
+],
+"slave_acquisitions": [
+"acquisition-Sentinel-1A_20181118T231324.859Z_77_IW-esa_scihub"
+,
+"acquisition-Sentinel-1A_20181118T231349.690Z_77_IW-esa_scihub"
+],
+"track_number": 77,
+"project": [
+"grfn"
+],
+"starttime": "2018-11-18T23:13:24",
+"orbitNumber": [
+24649
+,
+24999
+],
+"master_orbit_file": "S1A_OPER_AUX_POEORB_OPOD_20190101T120738_V20181211T225942_20181213T005942.EOF",
+"slc_slave_dt": "20181118T231324"
+},
+"browse_urls": [ ],
+"urls": [ ],
+"dataset_type": "ancillary",
+"endtime": "2018-12-12T23:13:50",
+"system_version": "v2.0.0",
+"center": {
+"type": "point",
+"coordinates": [
+-78.10478508755197
+,
+32.691524638912206
+]
+},
+"starttime": "2018-11-18T23:13:24",
+"temporal_span": 24
+}
+}
