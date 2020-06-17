@@ -38,7 +38,9 @@ def test_query(dataset_type):
 
   query = {"query":{
              "bool":{
-               "must":[{"term":{"dataset_type.raw":dataset_type}}]
+               ### "must":[{"term":{"dataset_type.raw":dataset_type}}],
+               ### "must":[{"term":{"id.raw":"VNP03MOD.A2015152.0600.001.2017261064559"}}]
+               "must":[{"term":{"dataset_type.raw":dataset_type}}, {"term":{"starttime":"2015-06-01T06:00:00.000Z"}}, {"term":{"endtime":"2015-06-01T06:06:00.000Z"}}]
              }
            },
            "sort":[{"_timestamp":{"order":"desc"}}],
@@ -138,6 +140,7 @@ def main():
 
     dataset_type = "CRIS-data"
     test_query(dataset_type)
+
     dataset_type = "VNP03MOD-data"
     test_query(dataset_type)
 
