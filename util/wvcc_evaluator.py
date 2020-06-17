@@ -123,10 +123,9 @@ def main():
     # read in context
     context_file = os.path.abspath("_context.json")
     if not os.path.exists(context_file):
-      logger.error('_context.json does not exist in current dir')
-      raise RuntimeError
+        raise RuntimeError
     with open(context_file) as f:
-      ctx = json.load(f)
+        ctx = json.load(f)
 
     # resolve acquisition id from slc id
     ### slc_id = ctx['slc_id']
@@ -138,7 +137,7 @@ def main():
     ### logger.info("acq_id: {}".format(acq_id))
 
     dataset_type = "CRIS-data"
-    ### test_query(dataset_type)
+    test_query(dataset_type)
     dataset_type = "VNP03MOD-data"
     test_query(dataset_type)
 
