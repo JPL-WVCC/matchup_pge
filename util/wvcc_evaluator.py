@@ -40,7 +40,9 @@ def test_query(dataset_type):
              "bool":{
                ### "must":[{"term":{"dataset_type.raw":dataset_type}}],
                ### "must":[{"term":{"id.raw":"VNP03MOD.A2015152.0600.001.2017261064559"}}]
-               "must":[{"term":{"dataset_type.raw":dataset_type}}, {"term":{"starttime":"2015-06-01T06:00:00.000Z"}}, {"term":{"endtime":"2015-06-01T06:06:00.000Z"}}]
+               ### "must":[{"term":{"dataset_type.raw":dataset_type}}, {"term":{"starttime":"2015-06-01T06:00:00.000Z"}}, {"term":{"endtime":"2015-06-01T06:06:00.000Z"}}]
+               ### "must":[{"term":{"dataset_type.raw":dataset_type}}, {"range":{"starttime":{"lte":"2015-06-01T00:55:00.000Z"}}}]
+               "must":[{"term":{"dataset_type.raw":dataset_type}}, {"range":{"starttime":{"lte":"2015-06-01T20:55:00.000Z"}}}]
              }
            },
            "sort":[{"_timestamp":{"order":"desc"}}],
@@ -139,7 +141,7 @@ def main():
     ### logger.info("acq_id: {}".format(acq_id))
 
     dataset_type = "CRIS-data"
-    test_query(dataset_type)
+    ### test_query(dataset_type)
 
     dataset_type = "VNP03MOD-data"
     test_query(dataset_type)
