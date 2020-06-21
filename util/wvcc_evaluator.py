@@ -119,6 +119,33 @@ def ifgcfg_exists(ifgcfg_id, version):
     return False if len(result) == 0 else True
 
 
+def cris_viirs_cfg(start_time, end_time):
+  # for each day worth of CrIS granules,
+  # find all the corresponding VIIRS granules in that same day
+  # plus one additional VIIRS granule on either side of the day boundary
+  # to form cris_viirs_cfg, and publish it to GRQ
+
+  # get all CrIS granules between the dates
+  dataset_type = 'CRIS-data'
+  query = {"query":{
+             "bool":{
+               "must":[{"term":{"dataset_type.raw":dataset_type}}, {"range":{"starttime":{"gte":start_time}}}, {"range":{"endtime":{"lte":end_time}}}]
+             }
+           },
+           "sort":[{"_timestamp":{"order":"desc"}}],
+           "fields":["_timestamp","_source"]
+          }
+  result = query_es(query, '')
+  logger.info("result: %s" % result)
+
+
+
+
+
+
+
+
+
 
 
 def main():
@@ -144,9 +171,11 @@ def main():
     ### test_query(dataset_type)
 
     dataset_type = "VNP03MOD-data"
-    test_query(dataset_type)
+    ### test_query(dataset_type)
 
+    ### cris_viirs_cfg("2015-06-01T20:15:00.000Z", "2015-06-01T20:55:00.000Z")
 
+    cris_viirs_cfg('2015-06-01T20:45:00Z', '2015-06-01T20:55:00Z')
 
 if __name__ == "__main__":
     try:
