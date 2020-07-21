@@ -1,6 +1,10 @@
 {
   "command":"/home/ops/matchup_pge/run_matchup.sh",
-  "imported_worker_files":{"/home/ops/.netrc":"/home/ops/.netrc"},
+  "imported_worker_files":{
+    "/home1/lpan/.netrc": ["/home/ops/.netrc"],
+    "/home1/lpan/.aws": ["/home/ops/.aws", "ro"],
+    "/home1/lpan/verdi/etc/settings.conf": "/home/ops/wvcc/conf/settings.conf"
+  },
   "recommended-queues":[
     "pleiades_job_worker-small"
   ],
@@ -8,6 +12,18 @@
   "soft_time_limit": 10000,
   "time_limit": 10000,
   "params" : [
+    {
+      "name": "dataset_tag",
+      "destination": "context"
+    },
+    {
+      "name": "input_metadata",
+      "destination": "context"
+    },
+    {
+      "name":"localize_products",
+      "destination":"localize"
+    },
     {
     "name": "start_time",
     "destination": "positional"

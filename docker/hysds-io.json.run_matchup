@@ -1,6 +1,16 @@
 {
-    "submission_type":"individual",
+    "submission_type":"iteration",
+    "label" : "WVCC CrIS VIIRS Matchup",
+    "allowed_accounts": [ "ops" ],
+    "enable_dedup": false,
     "params":[
+        { 
+           "name": "dataset_tag",
+           "from": "submitter",
+           "type": "text",
+           "default": "CrIS_VIIRS_Matchup",
+           "placeholder": "A value to append to the dataset identifier"
+        },
         {
            "name":"end_time",
            "from":"submitter"
@@ -8,6 +18,15 @@
         {
            "name":"start_time",
            "from":"submitter"
+        },
+        {
+           "name": "input_metadata",
+           "type": "text",
+           "from": "dataset_jpath:_source.metadata"
+        },
+        {
+           "name":"localize_products",
+           "from": "dataset_jpath:_source.metadata.localize_urls"
         }
     ]
 }
