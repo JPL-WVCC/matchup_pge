@@ -134,14 +134,32 @@ def ifgcfg_exists(ifgcfg_id, version):
     return False if len(result) == 0 else True
 
 
-def cris_viirs_cfg(start_time, end_time):
+def cris_viirs_cfg(start_time, end_time, script_file):
   # for each day worth of CrIS granules,
   # find all the corresponding VIIRS granules in that same day
   # plus one additional VIIRS granule on either side of the day boundary
-  # to form cris_viirs_cfg, and publish it to GRQ
+  # to form cris_viirs_cfg, and create a dataset around this configuration
 
-  config_cris_viirs = {}
+  # create a directory for the dataset
+  start1 = start_time.strftime('%Y%m%dT%H%M%S')
+  end1   = end_time.strftime('%Y%m%dT%H%M%S')
+  dirname1 = 'matchup_cris_viirs_{0}_{1}'.format(start1, end1)
+  logger.info("dirname1: {}".format(dirname1))
 
+  # cleanup if the dirctory already exists, then create a new dir
+  if os.path.isdir(dirname1):
+    try:
+      shutil.rmtree(dirname1)
+    except OSError:
+      logger.info("Unable to remove folder: {}".format(dirname1))
+  try:
+    os.mkdir(dirname1)
+  except OSError:
+    logger.info("Unable to create folder: {}".format(dirname1))
+
+
+  # the dict containing lists of granules
+  matchup_cris_viirs = {}
 
   # --- sounder CrIS
 
@@ -162,7 +180,7 @@ def cris_viirs_cfg(start_time, end_time):
   logger.info("----------- sounder granule urls: ----------")
   sounder_urls = query_result_2_url_list(result)
 
-  config_cris_viirs['sounder_granule_urls'] = sounder_urls
+  matchup_cris_viirs['sounder_granule_urls'] = sounder_urls
 
 
   # --- imager VIIRS
@@ -197,13 +215,39 @@ def cris_viirs_cfg(start_time, end_time):
   imager_urls += vlist0
   imager_urls += vlist2
 
-  config_cris_viirs['imager_granule_urls'] = imager_urls
+  matchup_cris_viirs['imager_granule_urls'] = imager_urls
 
-  logger.info("config_cris_viirs: {}".format(json.dumps(config_cris_viirs, indent=2)))
+  logger.info("matchup_cris_viirs: {}".format(json.dumps(matchup_cris_viirs, indent=2)))
+
+  # dump matchup_cris_viirs to met.json file
+  met_json1 = os.path.join(dirname1, dirname1+'.met.json')
+  with open(met_json1, 'w') as outfile:
+    json.dump(matchup_cris_viirs, outfile)
+
+  # create dataset.json file
+  dataset_json1 = os.path.join(dirname1, dirname1+'.dataset.json')
+
+  now = datetime.datetime.now()
+  datetime1 = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+  str_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+  str_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+  dataset_dict = {"version": "v1.0",
+                  "label": dirname1,
+                  "starttime": str_start_time,
+                  "endtime": str_end_time,
+                  "creation_timestamp": datetime1
+                 }
+
+  json_object = json.dumps(dataset_dict, indent = 4)
+
+  with open(dataset_json1, "w") as outfile:
+    outfile.write(json_object)
+
+  # add a line of ingest call
+  script_file.write('~/mozart/ops/hysds/scripts/ingest_dataset.py %s ~/mozart/etc/datasets.json\n' % dirname1)
 
 
-
-  # publish to GRQ/ES
 
 
 
@@ -228,15 +272,6 @@ def main():
     with open(context_file) as f:
         ctx = json.load(f)
 
-    # resolve acquisition id from slc id
-    ### slc_id = ctx['slc_id']
-    ### slc_version = ctx['slc_version']
-    ### acq_version = ctx['acquisition_version']
-    ### logger.info("slc_id : %s" % slc_id)
-    ### acq_id = resolve_acq(slc_id, acq_version)
-    ### acq_id = resolve_acq()
-    ### logger.info("acq_id: {}".format(acq_id))
-
     dataset_type = "CRIS-data"
     ### test_query(dataset_type)
 
@@ -246,10 +281,14 @@ def main():
     start_time = datetime.datetime(2015, 06, 01, 20, 15, 00, 000)
     end_time = datetime.datetime(2015, 06, 01, 20, 55, 00, 000)
 
-    ### cris_viirs_cfg("2015-06-01T20:15:00.000Z", "2015-06-01T20:55:00.000Z")
-    cris_viirs_cfg(start_time, end_time)
+    script_filename = "ingest_matchup.sh"
+    scriptfile1 = open(script_filename, "w")
+    scriptfile1.write('#!/usr/bin/env bash\n')
 
-    ### cris_viirs_cfg('2015-06-01T10:45:00Z', '2015-06-25T20:55:00Z')
+    cris_viirs_cfg(start_time, end_time, scriptfile1)
+
+    scriptfile1.close()
+
 
 if __name__ == "__main__":
     try:
