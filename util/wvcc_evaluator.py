@@ -160,6 +160,7 @@ def cris_viirs_cfg(start_time, end_time, script_file):
 
   # the dict containing lists of granules
   matchup_cris_viirs = {}
+  matchup_cris_viirs['localize_urls'] = []
 
   # --- sounder CrIS
 
@@ -180,7 +181,8 @@ def cris_viirs_cfg(start_time, end_time, script_file):
   logger.info("----------- sounder granule urls: ----------")
   sounder_urls = query_result_2_url_list(result)
 
-  matchup_cris_viirs['sounder_granule_urls'] = sounder_urls
+  ### matchup_cris_viirs['sounder_granule_urls'] = sounder_urls
+  matchup_cris_viirs['localize_urls'].extend(sounder_urls)
 
 
   # --- imager VIIRS
@@ -215,14 +217,15 @@ def cris_viirs_cfg(start_time, end_time, script_file):
   imager_urls += vlist0
   imager_urls += vlist2
 
-  matchup_cris_viirs['imager_granule_urls'] = imager_urls
+  ### matchup_cris_viirs['imager_granule_urls'] = imager_urls
+  matchup_cris_viirs['localize_urls'].extend(imager_urls)
 
   logger.info("matchup_cris_viirs: {}".format(json.dumps(matchup_cris_viirs, indent=2)))
 
   # dump matchup_cris_viirs to met.json file
   met_json1 = os.path.join(dirname1, dirname1+'.met.json')
   with open(met_json1, 'w') as outfile:
-    json.dump(matchup_cris_viirs, outfile)
+    json.dump(matchup_cris_viirs, outfile, indent=2)
 
   # create dataset.json file
   dataset_json1 = os.path.join(dirname1, dirname1+'.dataset.json')
@@ -255,7 +258,9 @@ def cris_viirs_cfg(start_time, end_time, script_file):
 def query_result_2_url_list(result):
   list1 = []
   for item in result:
-    list1.append(item['_source']['urls'])
+    for url in item['_source']['urls']:
+      if 'http' in url:
+        list1.append(url)
 
   logger.info("item urls: {}".format(json.dumps(list1, indent=2)))
   return list1
