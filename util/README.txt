@@ -1,3 +1,7 @@
+. to ingest for wvcc, goto its mozart from higgs:
+  ssh -i ~/.ssh/msas.pem ops@3.84.50.148
+  cd /data/input
+
 . to delete documents (datasets) in es database:
   https://www.elastic.co/guide/en/elasticsearch/reference/1.7/docs-delete.html
   curl -XDELETE "http://52.91.25.28:9200/{_index}/{_type}/{_id}"
