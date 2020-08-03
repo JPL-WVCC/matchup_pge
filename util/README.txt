@@ -1,0 +1,18 @@
+. to delete documents (datasets) in es database:
+  https://www.elastic.co/guide/en/elasticsearch/reference/1.7/docs-delete.html
+  curl -XDELETE "http://52.91.25.28:9200/{_index}/{_type}/{_id}"
+
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_matchup.cris.viirs/MATCHUP.CRIS.VIIRS/matchup_cris_viirs_20150601T201500_20150601T205500"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_matchup.cris.viirs2/MATCHUP.CRIS.VIIRS2/matchup_cris_viirs_20150601T201500_20150601T205500"
+
+. to query the result:
+  (base) leipan@weather2:~/pge/matchup_pge/util [5081] cat search.json
+  {"query":{
+    bool:{
+    must:{"term":{"dataset_type.raw":"MATCHUP-data2"}}
+    }
+   }
+  }
+
+  curl -H "Content-Type: application/json" -X POST -d @search.json "http://52.91.25.28:9200/_search"  (to find out _index, _type, _id)
+
