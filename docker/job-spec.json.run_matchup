@@ -3,7 +3,7 @@
   "imported_worker_files":{
     "/home1/lpan/.netrc": ["/home/ops/.netrc"],
     "/home1/lpan/.aws": ["/home/ops/.aws", "ro"],
-    "/home1/lpan/verdi/etc/settings.conf": "/home/ops/wvcc/conf/settings.conf"
+    "/home1/lpan/verdi/etc/wvcc_settings.conf": "/home/ops/wvcc/conf/settings.conf"
   },
   "recommended-queues":[
     "pleiades_job_worker-small"
