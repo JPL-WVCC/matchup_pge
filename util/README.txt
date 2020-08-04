@@ -1,3 +1,7 @@
+. to modify PGE for wvcc, goto its ci from higgs:
+  ssh -i ~/.ssh/msas.pem ops@54.167.55.23
+  cd /home/ops/pges/mine/matchup_pge
+
 . to ingest for wvcc, goto its mozart from higgs:
   ssh -i ~/.ssh/msas.pem ops@3.84.50.148
   cd /data/input
