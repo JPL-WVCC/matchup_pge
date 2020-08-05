@@ -9,7 +9,11 @@
   where the data is
   /raid15/leipan/ingest
 
-. to ingest for wvcc, goto its mozart from higgs:
+. how to get data from weather to mozart
+  the rsync command (ran under weather:/raid15/leipan/ingest/VIIRS/1)
+  rsync -rave  "ssh -i ~/.ssh/msas.pem" -a * ops@3.84.50.148:/data/input/VIIRS/1/1/.
+
+. to ingest data for wvcc, goto its mozart from higgs:
   ssh -i ~/.ssh/msas.pem ops@3.84.50.148
   cd /data/input
 
