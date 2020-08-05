@@ -2,6 +2,13 @@
   ssh -i ~/.ssh/msas.pem ops@54.167.55.23
   cd /home/ops/pges/mine/matchup_pge
 
+. to prepare for ingest, goto weather
+  ssh -Y leipan@weather
+  cd $HOME/pge/matchup_pge/util/
+  
+  where the data is
+  /raid15/leipan/ingest
+
 . to ingest for wvcc, goto its mozart from higgs:
   ssh -i ~/.ssh/msas.pem ops@3.84.50.148
   cd /data/input
