@@ -2,20 +2,29 @@
   ssh -i ~/.ssh/msas.pem ops@54.167.55.23
   cd /home/ops/pges/mine/matchup_pge
 
-. to prepare for ingest, goto weather
+. the input datasets for wvcc are a two-level composition
+  . the matchup datasets composed of localize urls of the granules
+  . the granules themselves
+  . both the above datasets need to be ingested to GRQ
+
+. to prepare for ingest of granules, goto weather
   ssh -Y leipan@weather
   cd $HOME/pge/matchup_pge/util/
   
-  where the data is
+  where the granule data is
   /raid15/leipan/ingest
 
 . how to get data from weather to mozart
   the rsync command (ran under weather:/raid15/leipan/ingest/VIIRS/1)
   rsync -rave  "ssh -i ~/.ssh/msas.pem" -a * ops@3.84.50.148:/data/input/VIIRS/1/1/.
 
-. to ingest data for wvcc, goto its mozart from higgs:
+. to ingest input grandule data for wvcc, goto its mozart from higgs:
   ssh -i ~/.ssh/msas.pem ops@3.84.50.148
   cd /data/input
+
+. to generate matchup input dataset on top of the granules, goto weather
+  cd $HOME/pge/matchup_pge/util/
+  python wvcc_evaluator.py
 
 . to delete documents (datasets) in es database:
   https://www.elastic.co/guide/en/elasticsearch/reference/1.7/docs-delete.html
