@@ -253,13 +253,17 @@ def cris_viirs_cfg(start_time, end_time, script_file):
 
 
 
-
-
 def query_result_2_url_list(result):
   list1 = []
   for item in result:
     for url in item['_source']['urls']:
       if 'http' in url:
+        # use dataset ID to obtain .nc filename, and append the .nc filename to the url
+        dataset_id = url.split('/')[-1]
+        logger.info("dataset_id: {}".format(dataset_id))
+        url += '/' + dataset_id + '.nc'
+        logger.info("url: {}".format(url))
+        # append the url to list
         list1.append(url)
 
   logger.info("item urls: {}".format(json.dumps(list1, indent=2)))
@@ -285,6 +289,9 @@ def main():
 
     start_time = datetime.datetime(2015, 06, 01, 20, 15, 00, 000)
     end_time = datetime.datetime(2015, 06, 01, 20, 55, 00, 000)
+
+    ### start_time = datetime.datetime(2015, 06, 01, 8, 15, 00, 000)
+    ### end_time = datetime.datetime(2015, 06, 01, 8, 55, 00, 000)
 
     script_filename = "ingest_matchup.sh"
     scriptfile1 = open(script_filename, "w")
