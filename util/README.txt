@@ -44,3 +44,21 @@
 
   curl -H "Content-Type: application/json" -X POST -d @search.json "http://52.91.25.28:9200/_search"  (to find out _index, _type, _id)
 
+. ---------- how to develop/debug the wvcc PGE/dataset ingest on pleiades ------
+. from higgs, login to pleiades, first to sfe1
+  alias pleiades='ssh -l lpan -Y sfe1.nas.nasa.gov'
+  then
+  ssh hfe1
+
+. to test the connections to the wvcc PCM
+  server/ip settings are in: /home1/lpan/verdi/ops/hysds/wvcc_celeryconfig.py
+  curl http://guest:guest@3.84.50.148:5672
+  curl http://:@3.84.50.148
+  curl http://52.91.25.28:9200
+  curl http://52.91.25.28:8878
+  wget --server-response --spider http://34.201.249.63
+
+. to start an interactive celery job
+  source wvcc.bashrc
+  celery worker --app=hysds --concurrency=1 --loglevel=INFO -Q pleiades_job_worker-small -n 1000 -O fair --without-mingle --without-gossip --heartbeat-interval=60
+
