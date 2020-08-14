@@ -12,12 +12,16 @@
            "placeholder": "A value to append to the dataset identifier"
         },
         {
-           "name":"end_time",
-           "from":"submitter"
-        },
-        {
            "name":"start_time",
            "from":"submitter"
+           "type": "text",
+           "default": "20150601T201500"
+        },
+        {
+           "name":"end_time",
+           "from":"submitter"
+           "type": "text",
+           "default": "20150601T205500"
         },
         {
            "name": "input_metadata",
