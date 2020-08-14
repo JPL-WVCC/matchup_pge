@@ -13,13 +13,13 @@
         },
         {
            "name":"start_time",
-           "from":"submitter"
+           "from":"submitter",
            "type": "text",
            "default": "20150601T201500"
         },
         {
            "name":"end_time",
-           "from":"submitter"
+           "from":"submitter",
            "type": "text",
            "default": "20150601T205500"
         },
