@@ -8,7 +8,8 @@ RUN source /opt/conda/bin/activate root \
  && conda install numpy \
  && conda install netCDF4 \
  && conda install pykdtree \
- && conda install h5py 
+ && conda install h5py \
+ && conda install basemap 
 
 USER ops
 COPY . /home/ops/matchup_pge
