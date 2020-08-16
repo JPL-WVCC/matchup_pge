@@ -5,6 +5,7 @@ LABEL description="wvcc CrIS VIIRS matchup PGE container"
 
 USER root
 RUN source /opt/conda/bin/activate root \
+ && conda config --add channels conda-forge \
  && conda install numpy \
  && conda install netCDF4 \
  && conda install pykdtree \
