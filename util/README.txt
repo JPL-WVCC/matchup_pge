@@ -25,6 +25,7 @@
 . to generate matchup input dataset on top of the granules, goto weather
   cd $HOME/pge/matchup_pge/util/
   python wvcc_evaluator.py
+  to generate 
 
 . to delete documents (datasets) in es database:
   https://www.elastic.co/guide/en/elasticsearch/reference/1.7/docs-delete.html
@@ -42,7 +43,8 @@
    }
   }
 
-  curl -H "Content-Type: application/json" -X POST -d @search.json "http://52.91.25.28:9200/_search"  (to find out _index, _type, _id)
+  curl -H "Content-Type: application/json" -X POST -d @search.json "http://52.91.25.28:9200/_search"  (to find out _index, _type, _id for deletion)
+  (It works on weather but not mozart. (private vs. public IPs))
 
 . ---------- how to develop/debug the wvcc PGE/dataset ingest on pleiades ------
 . from higgs, login to pleiades, first to sfe1
