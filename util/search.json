@@ -1,6 +1,6 @@
 {"query":{
              "bool":{
-               "must":{"term":{"dataset_type.raw":"MATCHUP-data"}}
+               "must":{"term":{"dataset_type.raw":"matchup-data"}}
              }
          }
 }
