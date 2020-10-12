@@ -171,6 +171,7 @@ def cris_viirs_cfg(start_time, end_time, script_file):
 
   # get all CrIS granules between start_time and end_time
   dataset_type = 'CRIS-data'
+  ### dataset_type = 'SNDR.SNPP.CRIS'
   result = query_range(dataset_type, str_start_time, str_end_time)
 
   ### logger.info("result: {}".format(json.dumps(result, indent=2)))
@@ -287,13 +288,15 @@ def main():
     dataset_type = "VNP03MOD-data"
     ### test_query(dataset_type)
 
+    """
     start_time = datetime.datetime(2015, 06, 01, 20, 15, 00, 000)
     end_time = datetime.datetime(2015, 06, 01, 20, 55, 00, 000)
+    """
 
-    ### start_time = datetime.datetime(2015, 06, 01, 8, 15, 00, 000)
-    ### end_time = datetime.datetime(2015, 06, 01, 8, 55, 00, 000)
+    start_time = datetime.datetime(2015, 06, 01, 0, 0, 00, 000)
+    end_time = datetime.datetime(2015, 06, 03, 0, 0, 00, 000)
 
-    script_filename = "ingest_matchup.sh"
+    script_filename = "ingest_matchup_test.sh"
     scriptfile1 = open(script_filename, "w")
     scriptfile1.write('#!/usr/bin/env bash\n')
 
