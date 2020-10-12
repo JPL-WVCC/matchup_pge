@@ -20,12 +20,21 @@
 
 . to ingest input grandule data for wvcc, goto its mozart from higgs:
   ssh -i ~/.ssh/msas.pem ops@3.84.50.148
-  cd /data/input
+  cd /data/input/CrIS
+  sh ingest_script.sh
+  cd /data/input/VIIRS
+  sh ingest_script_viirs.sh
 
 . to generate matchup input dataset on top of the granules, goto weather
   cd $HOME/pge/matchup_pge/util/
   python wvcc_evaluator.py
-  to generate 
+  to generate a script ingest_matchup.sh along with the input matchup datasets
+  which we take to mozart to run
+
+  tar zcvf ~/matchup_cris_viirs.tar.gz ingest_matchup.sh matchup_cris_viirs_20150601T201500_20150601T205500
+  scp -i ~/.ssh/msas.pem ~/matchup_cris_viirs.tar.gz ops@3.84.50.148:/data/input/.
+
+  then goto mozart to run: sh ingest_matchup.sh
 
 . to delete documents (datasets) in es database:
   https://www.elastic.co/guide/en/elasticsearch/reference/1.7/docs-delete.html
@@ -45,6 +54,32 @@
 
   curl -H "Content-Type: application/json" -X POST -d @search.json "http://52.91.25.28:9200/_search"  (to find out _index, _type, _id for deletion)
   (It works on weather but not mozart. (private vs. public IPs))
+
+. to query and then delete:
+  curl -H "Content-Type: application/json" -X POST -d @cris.json "http://52.91.25.28:9200/_search"
+  to find: "_index":"grq_v1.0_sndr.snpp.cris", "_type":"SNDR.SNPP.CRIS", "_id":"SNDR.SNPP.CRIS.20150601T0430.m06.g046.L1B_NSR.std.v02_05.G.180904185403"
+
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0324.m06.g035.L1B_NSR.std.v02_05.G.180904185041"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0430.m06.g046.L1B_NSR.std.v02_05.G.180904185403"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0312.m06.g033.L1B_NSR.std.v02_05.G.180904184846"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0018.m06.g004.L1B_NSR.std.v02_05.G.180907215315"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0048.m06.g009.L1B_NSR.std.v02_05.G.180907215401"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0218.m06.g024.L1B_NSR.std.v02_05.G.180904184817"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0242.m06.g028.L1B_NSR.std.v02_05.G.180904184921"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0342.m06.g038.L1B_NSR.std.v02_05.G.180904185239"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0006.m06.g002.L1B_NSR.std.v02_05.G.180907215322"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0742.m06.g078.L1B_NSR.std.v02_05.G.180904191535"
+
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T2048.m06.g209.L1B_NSR.std.v02_05.G.180904200434"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T2018.m06.g204.L1B_NSR.std.v02_05.G.180904200405"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T2030.m06.g206.L1B_NSR.std.v02_05.G.180904200358"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T2036.m06.g207.L1B_NSR.std.v02_05.G.180904200435"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T2024.m06.g205.L1B_NSR.std.v02_05.G.180904200645"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T2042.m06.g208.L1B_NSR.std.v02_05.G.180904200644"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/"
+  curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/"
+
+
 
 . ---------- how to develop/debug the wvcc PGE/dataset ingest on pleiades ------
 . from higgs, login to pleiades, first to sfe1
