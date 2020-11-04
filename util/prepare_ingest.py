@@ -71,7 +71,8 @@ if __name__ == '__main__':
   ### dataDir4='/raid15/qyue/VIIRS/VIIRS/20150601/'
   dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2015/'
  
-  script_filename = "ingest_script.sh"
+  ### script_filename = "ingest_script_viirs.sh"
+  script_filename = "ingest_script_cris.sh"
   scriptfile1 = open(script_filename, "w")
   scriptfile1.write('#!/usr/bin/env bash\n')
 
@@ -83,9 +84,11 @@ if __name__ == '__main__':
 
   # get VIIRS files
   ### viirs_geo_files = sorted(glob.glob(dataDir4+'VNP03MOD*201726106455*'))
+  """
   viirs_geo_files = sorted(glob.glob(dataDir4+'**/VNP03MOD*'+ext))
-  ### print ('viirs_geo_files: ', viirs_geo_files)
+  print ('viirs_geo_files: ', viirs_geo_files)
   create_dataset(viirs_geo_files, ingest_dir_root, scriptfile1)
+  """
 
   scriptfile1.close()
 

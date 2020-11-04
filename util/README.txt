@@ -28,7 +28,7 @@
 . to generate matchup input dataset on top of the granules, goto weather
   cd $HOME/pge/matchup_pge/util/
   python wvcc_evaluator.py
-  generates a script ingest_matchup.sh along with the input matchup datasets
+  to generate a script ingest_matchup.sh along with the input matchup datasets
   which we take to mozart to run
 
   tar zcvf ~/matchup_cris_viirs.tar.gz ingest_matchup.sh matchup_cris_viirs_20150601T201500_20150601T205500
@@ -52,7 +52,8 @@
    }
   }
 
-  curl -H "Content-Type: application/json" -X POST -d @search.json "http://52.91.25.28:9200/_search"  (to find out _index, _type, _id)
+  curl -H "Content-Type: application/json" -X POST -d @search.json "http://52.91.25.28:9200/_search"  (to find out _index, _type, _id for deletion)
+  (It works on weather but not mozart. (private vs. public IPs))
 
 . to query and then delete:
   curl -H "Content-Type: application/json" -X POST -d @cris.json "http://52.91.25.28:9200/_search?size=2000" (size=2000 gets 2000 returned items rather than the default 10)
