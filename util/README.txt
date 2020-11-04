@@ -55,7 +55,7 @@
   curl -H "Content-Type: application/json" -X POST -d @search.json "http://52.91.25.28:9200/_search"  (to find out _index, _type, _id)
 
 . to query and then delete:
-  curl -H "Content-Type: application/json" -X POST -d @cris.json "http://52.91.25.28:9200/_search"
+  curl -H "Content-Type: application/json" -X POST -d @cris.json "http://52.91.25.28:9200/_search?size=2000" (size=2000 gets 2000 returned items rather than the default 10)
   to find: "_index":"grq_v1.0_sndr.snpp.cris", "_type":"SNDR.SNPP.CRIS", "_id":"SNDR.SNPP.CRIS.20150601T0430.m06.g046.L1B_NSR.std.v02_05.G.180904185403"
 
   curl -XDELETE "http://52.91.25.28:9200/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150601T0324.m06.g035.L1B_NSR.std.v02_05.G.180904185041"
