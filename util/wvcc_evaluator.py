@@ -11,6 +11,7 @@ import logging
 import traceback
 import shutil
 ### import backoff
+import dateutil.parser
 
 from mycelery import app
 ### from hysds.dataset_ingest import ingest
@@ -253,6 +254,128 @@ def cris_viirs_cfg(start_time, end_time, script_file):
 
 
 
+def cris_viirs_cfg_1granule(start_time, end_time, script_file):
+  # for each of the CrIS granules between start_time and end_time,
+  # find the corresponding VIIRS granule at the same time
+  # plus one additional VIIRS granule on either side of the boundary
+  # to form cris_viirs_cfg, and create a dataset around this configuration
+
+  # create a directory for the dataset
+  start1 = start_time.strftime('%Y%m%dT%H%M%S')
+  end1   = end_time.strftime('%Y%m%dT%H%M%S')
+
+  # --- sounder CrIS
+
+  str_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+  logger.info("str_start_time: {}".format(str_start_time))
+  str_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+  logger.info("str_end_time: {}".format(str_end_time))
+
+  # get all CrIS granules between start_time and end_time
+  dataset_type = 'CRIS-data'
+  ### dataset_type = 'SNDR.SNPP.CRIS'
+  result = query_range(dataset_type, str_start_time, str_end_time)
+
+  ### logger.info("result: {}".format(json.dumps(result, indent=2)))
+  ### logger.info("len(result): %s" % str(len(result)))
+  ### logger.info("")
+
+  # collect all sounder granules in a list
+  logger.info("----------- sounder granule urls: ----------")
+  sounder_urls = query_result_2_url_list(result)
+  logger.info('sounder_urls: {}'.format(sounder_urls))
+  logger.info('len(sounder_urls): {}'.format(len(sounder_urls)))
+
+  for cris_url in sounder_urls:
+    logger.info('------------------ cris_url: {} ---------------------'.format(cris_url))
+    time1 = cris_url.split('SNDR.SNPP.CRIS.')[1].split('.')[0]
+    ### logger.info('time1: {}'.format(time1))
+    delta1 = 6
+    ### delta1 = 12
+    start_time = dateutil.parser.parse(time1) - datetime.timedelta(minutes=delta1)
+    end_time = dateutil.parser.parse(time1) + datetime.timedelta(minutes=delta1)
+    ### logger.info('start_time: {}'.format(start_time))
+
+    str_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+    logger.info('str_start_time: {}'.format(str_start_time))
+    str_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+    logger.info('str_end_time: {}'.format(str_end_time))
+
+    start1 = start_time.strftime('%Y%m%dT%H%M%S')
+    end1   = end_time.strftime('%Y%m%dT%H%M%S')
+
+    dirname1 = 'matchup_cris_viirs_{0}_{1}'.format(start1, end1)
+    logger.info("dirname1: {}".format(dirname1))
+
+    # cleanup if the dirctory already exists, then create a new dir
+    if os.path.isdir(dirname1):
+      try:
+        shutil.rmtree(dirname1)
+      except OSError:
+        logger.info("Unable to remove folder: {}".format(dirname1))
+    try:
+      os.mkdir(dirname1)
+    except OSError:
+      logger.info("Unable to create folder: {}".format(dirname1))
+
+    # the dict containing lists of granules
+    matchup_cris_viirs = {}
+    matchup_cris_viirs['localize_urls'] = []
+
+    matchup_cris_viirs['localize_urls'].append(cris_url)
+    ### logger.info("matchup_cris_viirs: {}".format(json.dumps(matchup_cris_viirs, indent=2)))
+
+    # get the VIIRS granule between start_time and end_time
+    dataset_type = 'VNP03MOD-data'
+    result = query_range(dataset_type, str_start_time, str_end_time)
+    logger.info("")
+    logger.info("result: %s" % result)
+    logger.info("VIIRS result: {}".format(json.dumps(result, indent=2)))
+    logger.info("len(result): %s" % str(len(result)))
+    logger.info("")
+
+    # collect all imager granules in a list
+    logger.info("----------- imager granule urls: ----------")
+    imager_urls = []
+    vlist0 = query_result_2_url_list(result)
+    imager_urls += vlist0
+
+    ### matchup_cris_viirs['imager_granule_urls'] = imager_urls
+    matchup_cris_viirs['localize_urls'].extend(imager_urls)
+
+    logger.info("matchup_cris_viirs: {}".format(json.dumps(matchup_cris_viirs, indent=2)))
+
+    # dump matchup_cris_viirs to met.json file
+    met_json1 = os.path.join(dirname1, dirname1+'.met.json')
+    with open(met_json1, 'w') as outfile:
+      json.dump(matchup_cris_viirs, outfile, indent=2)
+
+    # create dataset.json file
+    dataset_json1 = os.path.join(dirname1, dirname1+'.dataset.json')
+
+    now = datetime.datetime.now()
+    datetime1 = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    str_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+    str_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+    dataset_dict = {"version": "v1.0",
+                    "label": dirname1,
+                    "starttime": str_start_time,
+                    "endtime": str_end_time,
+                    "creation_timestamp": datetime1
+                   }
+
+    json_object = json.dumps(dataset_dict, indent = 4)
+
+    with open(dataset_json1, "w") as outfile:
+      outfile.write(json_object)
+
+    # add a line of ingest call
+    script_file.write('~/mozart/ops/hysds/scripts/ingest_dataset.py %s ~/mozart/etc/datasets.json\n' % dirname1)
+
+# end of cris_viirs_cfg_1granule
+
+
 
 def query_result_2_url_list(result):
   list1 = []
@@ -293,14 +416,15 @@ def main():
     end_time = datetime.datetime(2015, 06, 01, 20, 55, 00, 000)
     """
 
-    start_time = datetime.datetime(2015, 06, 01, 0, 0, 00, 000)
-    end_time = datetime.datetime(2015, 06, 03, 0, 0, 00, 000)
+    start_time = datetime.datetime(2015, 06, 01, 00, 00, 00, 000)
+    end_time = datetime.datetime(2015, 07, 01, 00, 00, 00, 000)
 
-    script_filename = "ingest_matchup_test.sh"
+    script_filename = "ingest_matchup.sh"
     scriptfile1 = open(script_filename, "w")
     scriptfile1.write('#!/usr/bin/env bash\n')
 
-    cris_viirs_cfg(start_time, end_time, scriptfile1)
+    ### cris_viirs_cfg(start_time, end_time, scriptfile1)
+    cris_viirs_cfg_1granule(start_time, end_time, scriptfile1)
 
     scriptfile1.close()
 
@@ -315,3 +439,4 @@ if __name__ == "__main__":
             f.write("%s\n" % traceback.format_exc())
         raise
     sys.exit(status)
+
