@@ -32,6 +32,7 @@ RUN mkdir -p /home/ops/dmtcp
 RUN mkdir -p /home/ops/local/dmtcp_installation
 RUN mkdir -p /home/ops/navp
 
+WORKDIR /home/ops/dmtcp
 RUN git clone https://github.com/dmtcp/dmtcp.git /home/ops/dmtcp && \
       git checkout 2.6 &&                    \
       git log -n 1
