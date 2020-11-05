@@ -18,8 +18,7 @@ RUN yum -y update && yum -y --setopt=tsflags=nodocs install    \
       gcc-c++                                   \
       build-essential                           \
       make                                      \
-      && yum clean all                          \
-      && cd /usr/local/bin                      \
+      && yum clean all                          
 
 USER ops
 COPY . /home/ops/matchup_pge
