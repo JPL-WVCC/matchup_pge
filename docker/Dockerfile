@@ -31,11 +31,10 @@ RUN set -ex \
 RUN mkdir -p /home/ops/dmtcp
 RUN mkdir -p /home/ops/local/dmtcp_installation
 RUN mkdir -p /home/ops/navp
-RUN mkdir -p /home/ops/local/dmtcp_installation
 
 WORKDIR /home/ops/dmtcp
 RUN git clone https://github.com/dmtcp/dmtcp.git /home/ops/dmtcp && \
-      git checkout 2.6 &&                    \
+      git checkout master &&                    \
       git log -n 1
 RUN git clone https://leipan:e47e4b23ab852c2ba732260183b12033ad591018@github.com/leipan/navp.git /home/ops/navp
 
