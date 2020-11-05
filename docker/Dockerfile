@@ -20,7 +20,6 @@ RUN yum -y update && yum -y --setopt=tsflags=nodocs install    \
       make                                      \
       && yum clean all                          \
       && cd /usr/local/bin                      \
-      && pip install --upgrade pip
 
 USER ops
 COPY . /home/ops/matchup_pge
