@@ -31,6 +31,7 @@ RUN set -ex \
 RUN mkdir -p /home/ops/dmtcp
 RUN mkdir -p /home/ops/local/dmtcp_installation
 RUN mkdir -p /home/ops/navp
+RUN mkdir -p /home/ops/local/dmtcp_installation
 
 WORKDIR /home/ops/dmtcp
 RUN git clone https://github.com/dmtcp/dmtcp.git /home/ops/dmtcp && \
