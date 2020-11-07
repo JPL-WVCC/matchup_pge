@@ -24,6 +24,7 @@ USER ops
 COPY . /home/ops/matchup_pge
 RUN set -ex \
  && echo "export PATH=$PATH:/home/ops/local/dmtcp_installation/bin" >> /home/ops/.bashrc \
+ && echo "alias h='history'"  >> /home/ops/.bashrc \
  && cd /tmp \
  && rm -rf CrIS_VIIRS_collocation-master \
  && git clone https://github.com/leipan/CrIS_VIIRS_collocation-master.git \
