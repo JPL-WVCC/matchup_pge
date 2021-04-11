@@ -1,0 +1,32 @@
+mozart ami-034cac101413163d1
+metrics ami-02b96854c127138c8
+grq ami-024ab0dc53721534a
+factotum ami-04a53e3809bc4a9a5
+verdi/autoscaling ami-07a3d26f784b9e9be
+
+cluster and lambda vpc:
+vpc-0ed9261aea0ac2286
+verdi and asg_vpc:
+vpc-0db7a713a6785cd0f (private) or
+vpc-0ed9261aea0ac2286 (on jplnet)
+
+subnet_id: subnet-058bb180c744135dc
+
+cluster_security_group:
+sg-029b5af59364a4b3c
+verdi_security_group:
+sg-0b4e1f7038191c5e1 (private) or
+sg-0ca93fee72d2b2ceb (on jplnet)
+
+pcm_cluster_role: am-pcm-cluster-role
+pcm_verdi_role: am-pcm-verdi-role
+dataset_bucket: wvcc-dev-rs-fwd-leipan
+code_bucket: wvcc-dev-cc-fwd-leipan
+docker_registry_bucket: wvcc-dev-cc-fwd-leipan
+isl_fwd_bucket: wvcc-dev-isl-fwd-leipan
+lts_bucket: wvcc-dev-lts-fwd-leipan
+triage_bucket: wvcc-dev-triage-fwd-leipan
+osl_fwd_bucket: wvcc-dev-osl-fwd-leipan
+venue: leipan
+aws account: 293861788641
+
