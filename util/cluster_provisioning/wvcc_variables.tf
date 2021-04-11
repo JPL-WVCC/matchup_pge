@@ -63,42 +63,42 @@ variable "subnet_id" {
 }
 
 variable "vpc_security_group_ids" {
-  type = "list"
+  type = list
   default = [
     "sg-0ada8792640d0c6c2"
   ]
 }
 
 variable "vpc_security_group_ids_mozart" {
-  type = "list"
+  type = list
   default = [
     "sg-0ada8792640d0c6c2"
   ]
 }
 
 variable "vpc_security_group_ids_metrics" {
-  type = "list"
+  type = list
   default = [
     "sg-0ada8792640d0c6c2"
   ]
 }
 
 variable "vpc_security_group_ids_grq" {
-  type = "list"
+  type = list
   default = [
     "sg-0ada8792640d0c6c2"
   ]
 }
 
 variable "vpc_security_group_ids_factotum" {
-  type = "list"
+  type = list
   default = [
     "sg-0ada8792640d0c6c2"
   ]
 }
 
 variable "vpc_security_group_ids_ci" {
-  type = "list"
+  type = list
   default = [
     "sg-0ada8792640d0c6c2"
   ]
@@ -119,7 +119,7 @@ variable "pcm_verdi_role" {
 }
 # mozart vars
 variable "mozart" {
-  type = "map"
+  type = map
   default = {
     name = "mozart"
     ami = "ami-034cac101413163d1"
@@ -135,7 +135,7 @@ variable "mozart" {
 
 # metrics vars
 variable "metrics" {
-  type = "map"
+  type = map
   default = {
     name = "metrics"
     ami = "ami-02b96854c127138c8"
@@ -148,7 +148,7 @@ variable "metrics" {
 
 # grq vars
 variable "grq" {
-  type = "map"
+  type = map
   default = {
     name = "grq"
     ami = "ami-024ab0dc53721534a"
@@ -161,7 +161,7 @@ variable "grq" {
 
 # factotum vars
 variable "factotum" {
-  type = "map"
+  type = map
   default = {
     name = "factotum"
     ami = "ami-04a53e3809bc4a9a5"
@@ -176,7 +176,7 @@ variable "factotum" {
 
 # ci vars
 variable "ci" {
-  type = "map"
+  type = map
   default = {
     name = "ci"
     ami = "ami-020e21e5712afefc4"
@@ -199,7 +199,7 @@ variable "common_ci" {
 }
 # autoscale vars
 variable "autoscale" {
-  type = "map"
+  type = map
   default = {
     name = "autoscale"
     ami = "ami-07db5946dc5d4d6fa"
