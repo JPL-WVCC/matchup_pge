@@ -1,7 +1,7 @@
 provider "aws" {
-  shared_credentials_file = "${var.shared_credentials_file}"
-  region                  = "${var.region}"
-  profile              = "${var.profile}"
+  shared_credentials_file = var.shared_credentials_file
+  region                  = var.region
+  profile              = var.profile
 }
 
 resource "null_resource" "initialize" {
@@ -15,7 +15,7 @@ resource "random_id" "counter" {
 }
 
 locals {
-  counter = "${var.counter != "" ? var.counter : random_id.counter.hex}"
+  counter = var.counter != "" ? var.counter : random_id.counter.hex
   dataset_bucket = "${var.project}-${var.environment}-lts-fwd-${var.venue}"
   code_bucket = "${var.project}-${var.environment}-cc-fwd-${var.venue}"
 }
@@ -26,28 +26,28 @@ locals {
 
 resource "aws_instance" "mozart" {
   ### depends_on            = ["aws_instance.metrics", "aws_instance.ci"]
-  depends_on            = ["aws_instance.metrics"]
-  ami                    = "${var.mozart["ami"]}"
-  instance_type          = "${var.mozart["instance_type"]}"
-  key_name               = "${var.key_name}"
-  availability_zone      = "${var.az}"
-  iam_instance_profile = "${var.pcm_cluster_role["name"]}"
+  depends_on            = [aws_instance.metrics]
+  ami                    = var.mozart["ami"]
+  instance_type          = var.mozart["instance_type"]
+  key_name               = var.key_name
+  availability_zone      = var.az
+  iam_instance_profile = var.pcm_cluster_role["name"]
   tags                   = {
                              Name = "${var.project}-${var.venue}-${local.counter}-pcm-${var.mozart["name"]}"
                            }
-  subnet_id              = "${var.subnet_id}"
-  vpc_security_group_ids = "${var.vpc_security_group_ids_mozart}"
+  subnet_id              = var.subnet_id
+  vpc_security_group_ids = var.vpc_security_group_ids_mozart
 
 
   ebs_block_device {
-    device_name = "${var.mozart["data_dev"]}"
-    volume_size = "${var.mozart["data_dev_size"]}"
+    device_name = var.mozart["data_dev"]
+    volume_size = var.mozart["data_dev_size"]
     volume_type = "gp2"
     delete_on_termination = true
   }
   ebs_block_device {
-    device_name = "${var.mozart["data2_dev"]}"
-    volume_size = "${var.mozart["data2_dev_size"]}"
+    device_name = var.mozart["data2_dev"]
+    volume_size = var.mozart["data2_dev_size"]
     volume_type = "gp2"
     delete_on_termination = true
   }
@@ -57,7 +57,7 @@ resource "aws_instance" "mozart" {
     host     = aws_instance.mozart.private_ip
     type     = "ssh"
     user     = "hysdsops"
-    private_key = "${file(var.private_key_file)}"
+    private_key = file(var.private_key_file)
   }
 
   provisioner "local-exec" {
@@ -65,7 +65,7 @@ resource "aws_instance" "mozart" {
   }
   
   provisioner "file" {
-    source      = "${var.private_key_file}"
+    source      = var.private_key_file
     destination = ".ssh/${basename(var.private_key_file)}"
   }
 
@@ -307,11 +307,11 @@ resource "aws_instance" "mozart" {
 }
 
 output "mozart_pvt_ip" {
-  value = "${aws_instance.mozart.private_ip}"
+  value = aws_instance.mozart.private_ip
 }
 
 output "mozart_pub_ip" {
-  value = "${aws_instance.mozart.public_ip}"
+  value = aws_instance.mozart.public_ip
 }
 
 
@@ -320,20 +320,20 @@ output "mozart_pub_ip" {
 ######################
 
 resource "aws_instance" "metrics" {
-  ami                    = "${var.metrics["ami"]}"
-  instance_type          = "${var.metrics["instance_type"]}"
-  key_name               = "${var.key_name}"
-  availability_zone      = "${var.az}"
-  iam_instance_profile   = "${var.pcm_cluster_role["name"]}"
+  ami                    = var.metrics["ami"]
+  instance_type          = var.metrics["instance_type"]
+  key_name               = var.key_name
+  availability_zone      = var.az
+  iam_instance_profile   = var.pcm_cluster_role["name"]
   tags                   = {
                              Name = "${var.project}-${var.venue}-${local.counter}-pcm-${var.metrics["name"]}"
                            }
-  subnet_id              = "${var.subnet_id}"
-  vpc_security_group_ids = "${var.vpc_security_group_ids_metrics}"
+  subnet_id              = var.subnet_id
+  vpc_security_group_ids = var.vpc_security_group_ids_metrics
 
   ebs_block_device {
-    device_name = "${var.metrics["data_dev"]}"
-    volume_size = "${var.metrics["data_dev_size"]}"
+    device_name = var.metrics["data_dev"]
+    volume_size = var.metrics["data_dev_size"]
     volume_type = "gp2"
     delete_on_termination = true
   }
@@ -342,7 +342,7 @@ resource "aws_instance" "metrics" {
     host = self.private_ip
     type     = "ssh"
     user     = "hysdsops"
-    private_key = "${file(var.private_key_file)}"
+    private_key = file(var.private_key_file)
   }
 
   provisioner "local-exec" {
@@ -352,11 +352,11 @@ resource "aws_instance" "metrics" {
 }
 
 output "metrics_pvt_ip" {
-  value = "${aws_instance.metrics.private_ip}"
+  value = aws_instance.metrics.private_ip
 }
 
 output "metrics_pub_ip" {
-  value = "${aws_instance.metrics.public_ip}"
+  value = aws_instance.metrics.public_ip
 }
 
 
@@ -366,19 +366,19 @@ output "metrics_pub_ip" {
 ######################
 
 resource "aws_instance" "grq" {
-  ami                    = "${var.grq["ami"]}"
-  instance_type          = "${var.grq["instance_type"]}"
-  key_name               = "${var.key_name}"
-  availability_zone      = "${var.az}"
-  iam_instance_profile   = "${var.pcm_cluster_role["name"]}"
+  ami                    = var.grq["ami"]
+  instance_type          = var.grq["instance_type"]
+  key_name               = var.key_name
+  availability_zone      = var.az
+  iam_instance_profile   = var.pcm_cluster_role["name"]
   tags                   = {
                              Name = "${var.project}-${var.venue}-${local.counter}-pcm-${var.grq["name"]}"
                            }
-  subnet_id              = "${var.subnet_id}"
-  vpc_security_group_ids = "${var.vpc_security_group_ids_grq}"
+  subnet_id              = var.subnet_id
+  vpc_security_group_ids = var.vpc_security_group_ids_grq
   ebs_block_device {
-    device_name = "${var.grq["data_dev"]}"
-    volume_size = "${var.grq["data_dev_size"]}"
+    device_name = var.grq["data_dev"]
+    volume_size = var.grq["data_dev_size"]
     volume_type = "gp2"
     delete_on_termination = true
   }
@@ -387,7 +387,7 @@ resource "aws_instance" "grq" {
     host = self.private_ip
     type     = "ssh"
     user     = "hysdsops"
-    private_key = "${file(var.private_key_file)}"
+    private_key = file(var.private_key_file)
   }
 
  
@@ -417,11 +417,11 @@ resource "aws_instance" "grq" {
 }
 
 output "grq_pvt_ip" {
-  value = "${aws_instance.grq.private_ip}"
+  value = aws_instance.grq.private_ip
 }
 
 output "grq_pub_ip" {
-  value = "${aws_instance.grq.public_ip}"
+  value = aws_instance.grq.public_ip
 }
 
 
@@ -430,26 +430,26 @@ output "grq_pub_ip" {
 ######################
 
 resource "aws_instance" "factotum" {
-  ami                    = "${var.factotum["ami"]}"
-  instance_type          = "${var.factotum["instance_type"]}"
-  key_name               = "${var.key_name}"
-  availability_zone      = "${var.az}"
-  iam_instance_profile   = "${var.pcm_cluster_role["name"]}"
+  ami                    = var.factotum["ami"]
+  instance_type          = var.factotum["instance_type"]
+  key_name               = var.key_name
+  availability_zone      = var.az
+  iam_instance_profile   = var.pcm_cluster_role["name"]
   tags                   = {
                              Name = "${var.project}-${var.venue}-${local.counter}-pcm-${var.factotum["name"]}"
                            }
-  subnet_id              = "${var.subnet_id}"
-  vpc_security_group_ids = "${var.vpc_security_group_ids_factotum}"
+  subnet_id              = var.subnet_id
+  vpc_security_group_ids = var.vpc_security_group_ids_factotum
 
   #ebs_block_device {
-  #  device_name = "${var.factotum["docker_storage_dev"]}"
-  #  volume_size = "${var.factotum["docker_storage_dev_size"]}"
+  #  device_name = var.factotum["docker_storage_dev"]
+  #  volume_size = var.factotum["docker_storage_dev_size"]
   #  volume_type = "gp2"
   #  delete_on_termination = true
   #}
   ebs_block_device {
-    device_name = "${var.factotum["data_dev"]}"
-    volume_size = "${var.factotum["data_dev_size"]}"
+    device_name = var.factotum["data_dev"]
+    volume_size = var.factotum["data_dev_size"]
     volume_type = "gp2"
     delete_on_termination = true
   }
@@ -458,7 +458,7 @@ resource "aws_instance" "factotum" {
     host = self.private_ip
     type     = "ssh"
     user     = "hysdsops"
-    private_key = "${file(var.private_key_file)}"
+    private_key = file(var.private_key_file)
   }
 
   provisioner "local-exec" {
@@ -484,11 +484,11 @@ resource "aws_instance" "factotum" {
 }
 
 output "factotum_pvt_ip" {
-  value = "${aws_instance.factotum.private_ip}"
+  value = aws_instance.factotum.private_ip
 }
 
 output "factotum_pub_ip" {
-  value = "${aws_instance.factotum.public_ip}"
+  value = aws_instance.factotum.public_ip
 }
 
 ######################
