@@ -1,0 +1,15 @@
+export artifactory_repo=general-develop
+export hysds_release=v4.0.0
+export code_bucket=soamc-dev-cc-fwd
+export dataset_bucket=soamc-dev-rs-fwd
+export isl_bucket=soamc-dev-isl-fwd
+export triage_bucket=soamc-dev-triage-fwd
+export lts_bucket=soamc-dev-lts-fwd
+export osl_bucket=soamc-dev-osl-fwd
+export docker_registry_bucket=soamc-registry-bucket
+export use_artifactory=False
+export soamc_pcm_branch=SOAMC-14
+export pcm_commons_branch=develop
+export git_auth_key=
+export soamc_pcm_repo=github.jpl.nasa.gov/SOAMC/soamc-pcm.git
+export pcm_commons_repo=github.jpl.nasa.gov/IEMS-SDS/pcm_commons.git
