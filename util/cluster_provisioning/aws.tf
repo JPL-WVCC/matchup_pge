@@ -522,7 +522,7 @@ output "factotum_pub_ip" {
 #
 #  connection {
 #    type     = "ssh"
-#    user     = "ops"
+#    user     = "hysdsops"
 #    private_key = "${file(var.private_key_file)}"
 #  }
 #
