@@ -51,77 +51,13 @@ variable "bach_ui_branch" {
   default = "nisar"
 }
 
-/*
-variable "venue" {
-}
-*/
-
-/*
-variable "counter" {
-  default = ""
-}
-*/
-
-/*
-variable "private_key_file" {
-}
-
-variable "git_auth_key" {
-}
-
-variable "jenkins_api_user" {
-  default = ""
-}
-*/
-
 variable "keypair_name" {
   default = ""
 }
 
-/*
-variable "jenkins_api_key" {
-}
-*/
-
-/*
-variable "ops_password" {
-  default = "hysdsops"
-}
-*/
-
-/*
-variable "shared_credentials_file" {
-  default = "~/.aws/credentials"
-}
-*/
-
 #
 # "default" links to [default] profile in "shared_credentials_file" above
 #
-/*
-variable "profile" {
-  default = "saml-pub"
-}
-*/
-
-/*
-variable "project" {
-  default = "nisar"
-}
-*/
-
-/*
-variable "region" {
-  default = "us-west-2"
-}
-*/
-
-/*
-variable "az" {
-  default = "us-west-2a"
-}
-*/
-
 variable grq_aws_es {
   default = false
 }
@@ -142,161 +78,11 @@ variable "use_grq_aws_es_private_verdi" {
   default = true
 }
 
-/*
-variable "subnet_id" {
-  default = "subnet-8991c9ed"
-}
-*/
-
 variable "verdi_security_group_id" {
 }
 
 variable "cluster_security_group_id" {
 }
-
-/*
-variable "pcm_cluster_role" {
-  default = {
-    name = "am-pcm-cluster-role"
-    path = "/"
-  }
-}
-*/
-
-/*
-variable "pcm_verdi_role" {
-  default = {
-    name = "am-pcm-verdi-role"
-    path = "/"
-  }
-}
-*/
-
-# mozart vars
-/*
-variable "mozart" {
-  type = map(string)
-  default = {
-    name          = "mozart"
-    instance_type = "r5.xlarge"
-    root_dev_size = 100
-    private_ip    = ""
-    public_ip     = ""
-  }
-}
-*/
-
-# metrics vars
-/*
-variable "metrics" {
-  type = map(string)
-  default = {
-    name          = "metrics"
-    instance_type = "r5.xlarge"
-    private_ip    = ""
-    public_ip     = ""
-  }
-}
-*/
-
-# grq vars
-/*
-variable "grq" {
-  type = map(string)
-  default = {
-    name          = "grq"
-    instance_type = "r5.xlarge"
-    private_ip    = ""
-    public_ip     = ""
-  }
-}
-*/
-
-# factotum vars
-/*
-variable "factotum" {
-  type = map(string)
-  default = {
-    name          = "factotum"
-    instance_type = "c5.xlarge"
-    root_dev_size = 50
-    data          = "/data"
-    data_dev      = "/dev/xvdb"
-    data_dev_size = 300
-    private_ip    = ""
-    public_ip     = ""
-  }
-}
-*/
-
-# ci vars
-/*
-variable "ci" {
-  type = map(string)
-  default = {
-    name          = "ci"
-    instance_type = "c5.xlarge"
-    data          = "/data"
-    data_dev      = "/dev/xvdb"
-    data_dev_size = 100
-    private_ip    = ""
-    public_ip     = ""
-  }
-}
-*/
-
-/*
-variable "common_ci" {
-  type = map(string)
-  default = {
-    name       = "ci"
-    private_ip = "100.64.122.201"
-    public_ip  = "100.64.122.201"
-  }
-}
-*/
-
-# autoscale vars
-/*
-variable "autoscale" {
-  type = map(string)
-  default = {
-    name          = "autoscale"
-    instance_type = "t2.micro"
-    data          = "/data"
-    data_dev      = "/dev/xvdb"
-    data_dev_size = 300
-    private_ip    = ""
-    public_ip     = ""
-  }
-}
-*/
-
-# staging area vars
-
-/*
-variable "lambda_vpc" {
-  default = "vpc-b42510d0"
-}
-*/
-
-/*
-variable "lambda_role_arn" {
-  default = "arn:aws:iam::271039147104:role/am-pcm-lambda-role"
-}
-*/
-
-/*
-variable "lambda_job_type" {
-  default = "INGEST_STAGED"
-}
-*/
-
-/*
-variable "lambda_job_queue" {
-  default = "nisar-job_worker-small"
-}
-*/
 
 # CNM Response job vars
 
@@ -332,27 +118,9 @@ variable "daac_endpoint_url" {
   default = ""
 }
 
-# asg vars
-/*
-variable "asg_use_role" {
-  default = "true"
-}
-*/
-
-/*
-variable "asg_role" {
-  default = "am-pcm-verdi-role"
-}
-*/
-
-/*
-variable "asg_vpc" {
-  default = "vpc-b42510d0"
-}
-*/
-
 variable "aws_account_id" {
-  default = "271039147104"
+  ### default = "271039147104"
+  default = "293861788641"
 }
 
 variable "lambda_package_release" {
@@ -390,12 +158,6 @@ variable "delete_old_observation_catalog" {
 variable "delete_old_radar_mode_catalog" {
   default = false
 }
-
-/*
-variable "environment" {
-  default = "dev"
-}
-*/
 
 variable "use_artifactory" {
   default = false
