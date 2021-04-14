@@ -39,7 +39,6 @@ variable "shared_credentials_file" {
 #
 variable "profile" {
   default = "saml-pub"
-  ### default = "saml-pub"
 }
 # __key_name__ is the aws Key pair name
 variable "key_name" {
