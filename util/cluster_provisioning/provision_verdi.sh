@@ -1,4 +1,4 @@
-source env.sh
+source ./env.sh
 curl -O https://cae-artifactory.jpl.nasa.gov/artifactory/${artifactory_repo}/gov/nasa/jpl/iems/sds/pcm/${hysds_release}/hysds-conda_env-${hysds_release}.tar.gz
 mkdir -p ~/conda
 tar xvfz hysds-conda_env-${hysds_release}.tar.gz -C conda
