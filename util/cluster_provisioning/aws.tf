@@ -35,6 +35,9 @@ resource "aws_instance" "mozart" {
   tags                   = {
                              Name = "${var.project}-${var.venue}-${local.counter}-pcm-${var.mozart["name"]}"
                            }
+   lifecycle {
+    ignore_changes = [tags]
+  }
   subnet_id              = var.subnet_id
   vpc_security_group_ids = var.vpc_security_group_ids_mozart
 
@@ -287,6 +290,7 @@ resource "aws_instance" "mozart" {
       "  git clone --single-branch -b ${var.bach_ui_branch} https://${var.git_auth_key}@${var.bach_ui_repo} bach_ui",
       "fi",
       "export PATH=~/conda/bin:$PATH",
+      "pip install future",
       "cp -rp nisar-pcm/conf/sds ~/.sds",
       "cp ~/.sds.bak/config ~/.sds",
       "cd bach_ui",
@@ -328,6 +332,9 @@ resource "aws_instance" "metrics" {
   tags                   = {
                              Name = "${var.project}-${var.venue}-${local.counter}-pcm-${var.metrics["name"]}"
                            }
+   lifecycle {
+    ignore_changes = [tags]
+  }
   subnet_id              = var.subnet_id
   vpc_security_group_ids = var.vpc_security_group_ids_metrics
 
@@ -347,6 +354,22 @@ resource "aws_instance" "metrics" {
 
   provisioner "local-exec" {
     command = "echo aws_instance.metrics.public_ip = ${aws_instance.metrics.private_ip} >> pcm_cluster_ip_address.txt"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "if [ \"${var.hysds_release}\" != \"develop\" ]; then",
+      "  curl -O \"https://cae-artifactory.jpl.nasa.gov/artifactory/${var.artifactory_repo}/gov/nasa/jpl/iems/sds/pcm/${var.hysds_release}/hysds-conda_env-${var.hysds_release}.tar.gz\"",
+      "  mkdir -p ~/conda",
+      "  tar xvfz hysds-conda_env-${var.hysds_release}.tar.gz -C conda",
+      "  export PATH=$HOME/conda/bin:$PATH",
+      "  conda-unpack",
+      "  rm -rf hysds-conda_env-${var.hysds_release}.tar.gz",
+      "  curl -O \"https://cae-artifactory.jpl.nasa.gov/artifactory/${var.artifactory_repo}/gov/nasa/jpl/iems/sds/pcm/${var.hysds_release}/hysds-metrics_venv-${var.hysds_release}.tar.gz\"",
+      "  tar xvfz hysds-metrics_venv-${var.hysds_release}.tar.gz",
+      "  rm -rf hysds-metrics_venv-${var.hysds_release}.tar.gz",
+      "fi",
+    ]
   }
 
 }
@@ -374,6 +397,9 @@ resource "aws_instance" "grq" {
   tags                   = {
                              Name = "${var.project}-${var.venue}-${local.counter}-pcm-${var.grq["name"]}"
                            }
+   lifecycle {
+    ignore_changes = [tags]
+  }
   subnet_id              = var.subnet_id
   vpc_security_group_ids = var.vpc_security_group_ids_grq
   ebs_block_device {
@@ -438,6 +464,9 @@ resource "aws_instance" "factotum" {
   tags                   = {
                              Name = "${var.project}-${var.venue}-${local.counter}-pcm-${var.factotum["name"]}"
                            }
+   lifecycle {
+    ignore_changes = [tags]
+  }
   subnet_id              = var.subnet_id
   vpc_security_group_ids = var.vpc_security_group_ids_factotum
 
@@ -609,6 +638,41 @@ output "autoscale_pvt_ip" {
 
 output "autoscale_pub_ip" {
   value = "${aws_instance.autoscale.public_ip}"
+}
+
+*/
+
+
+/*
+resource "null_resource" "mozart" {
+  ### depends_on = [module.common.mozart]
+  depends_on = [aws_instance.mozart]
+
+  triggers = {
+    private_ip       = aws_instance.mozart.private_ip
+    private_key_file = var.private_key_file
+    code_bucket      = var.code_bucket
+    dataset_bucket   = var.dataset_bucket
+    triage_bucket    = var.triage_bucket
+    lts_bucket       = var.lts_bucket
+  }
+
+  connection {
+    type        = "ssh"
+    host        = self.triggers.private_ip
+    user        = "hysdsops"
+    private_key = file(self.triggers.private_key_file)
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "set -ex",
+      "source ~/.bash_profile",
+      "cd ~/.sds/files",
+      "~/mozart/ops/hysds/scripts/ingest_dataset.py AOI_sacramento_valley ~/mozart/etc/datasets.json",
+      "echo Your cluster has been provisioned!",
+    ]
+  }
 }
 
 */
