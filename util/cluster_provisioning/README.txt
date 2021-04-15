@@ -17,16 +17,16 @@ var.jenkins_api_key
   Enter a value: 11114e63d8baded1bded892c01f8b91781
 
 
----- ran on Sunday, 4/11/21 ----
+---- ran on Wed, 4/14/21 ----
 Outputs:
 
 ci_pub_ip = 100.67.45.139
 ci_pvt_ip = 100.67.45.139
 factotum_pub_ip = 
-factotum_pvt_ip = 100.67.42.114
+factotum_pvt_ip = 100.67.42.87
 grq_pub_ip = 
-grq_pvt_ip = 100.67.42.164
+grq_pvt_ip = 100.67.43.122
 metrics_pub_ip = 
-metrics_pvt_ip = 100.67.41.84
+metrics_pvt_ip = 100.67.42.107
 mozart_pub_ip = 
-mozart_pvt_ip = 100.67.43.230
+mozart_pvt_ip = 100.67.43.246
