@@ -421,25 +421,31 @@ resource "aws_instance" "grq" {
     command = "echo aws_instance.grq.public_ip = ${aws_instance.grq.private_ip} >> pcm_cluster_ip_address.txt"
   }
 
-
   provisioner "remote-exec" {
     inline = [
-      /*
-      "sudo mkfs.xfs ${var.grq["data_dev"]}",
-      "sudo bash -c \"echo ${lookup(var.grq, "data_dev_mount", var.grq["data_dev"])} ${var.grq["data"]} auto defaults,nofail,comment=terraform 0 2 >> /etc/fstab\"",
-      "sudo mkdir -p ${var.grq["data"]}",
-      "sudo mount ${var.grq["data"]}",
-      "sudo chown -R ops:ops ${var.grq["data"]}",
-      "sudo systemctl stop elasticsearch",
-      "sudo systemctl stop redis",
-      "sudo mkdir -p ${var.grq["data"]}/var/lib",
-      "sudo mv /var/lib/redis ${var.grq["data"]}/var/lib/",
-      "sudo ln -sf ${var.grq["data"]}/var/lib/redis /var/lib/redis",
-      "sudo systemctl start redis",
-      "(sudo mv /var/lib/elasticsearch ${var.grq["data"]}/var/lib/ && sudo ln -sf ${var.grq["data"]}/var/lib/elasticsearch /var/lib/elasticsearch && sudo systemctl start elasticsearch) &"
-     */
+      "if [ \"${var.hysds_release}\" != \"develop\" ]; then",
+      "  curl -O \"https://cae-artifactory.jpl.nasa.gov/artifactory/${var.artifactory_repo}/gov/nasa/jpl/iems/sds/pcm/${var.hysds_release}/hysds-conda_env-${var.hysds_release}.tar.gz\"",
+      "  mkdir -p ~/conda",
+      "  tar xvfz hysds-conda_env-${var.hysds_release}.tar.gz -C conda",
+      "  export PATH=$HOME/conda/bin:$PATH",
+      "  conda-unpack",
+      "  rm -rf hysds-conda_env-${var.hysds_release}.tar.gz",
+      "  curl -O \"https://cae-artifactory.jpl.nasa.gov/artifactory/${var.artifactory_repo}/gov/nasa/jpl/iems/sds/pcm/${var.hysds_release}/hysds-grq_venv-${var.hysds_release}.tar.gz\"",
+      "  tar xvfz hysds-grq_venv-${var.hysds_release}.tar.gz",
+      "  rm -rf hysds-grq_venv-${var.hysds_release}.tar.gz",
+      "fi",
+      "if [ \"${var.use_artifactory}\" = true ]; then",
+      "  curl -O \"https://cae-artifactory.jpl.nasa.gov/artifactory/${var.artifactory_repo}/gov/nasa/jpl/nisar/sds/pcm/bach-api-${var.bach_api_branch}.tar.gz\"",
+      "  tar xvfz bach-api-${var.bach_api_branch}.tar.gz",
+      "  ln -s /export/home/hysdsops/mozart/ops/bach-api-${var.bach_api_branch} /export/home/hysdsops/mozart/ops/bach-api",
+      "  rm -rf bach-api-${var.bach_api_branch}.tar.gz ",
+      "else",
+      "  git clone --single-branch -b ${var.bach_api_branch} https://${var.git_auth_key}@${var.bach_api_repo}",
+      "fi"
     ]
   }
+
+
 }
 
 output "grq_pvt_ip" {
@@ -496,20 +502,20 @@ resource "aws_instance" "factotum" {
 
   provisioner "remote-exec" {
     inline = [
-      "cd /tmp",
-      "git clone https://github.com/pymonger/docker-ephemeral-lvm.git",
-      "cd docker-ephemeral-lvm/docker-ephemeral-lvm.d"
-      /*
-      "sudo bash docker-ephemeral-lvm.sh.no_encrypt_data",
-      "sudo systemctl stop redis",
-      "sudo mkdir -p ${var.factotum["data"]}/var/lib",
-      "sudo mv /var/lib/redis ${var.factotum["data"]}/var/lib/",
-      "sudo ln -sf ${var.factotum["data"]}/var/lib/redis /var/lib/redis",
-      "sudo systemctl start redis",
-      "sudo bash -c \"echo ${lookup(var.factotum, "data_dev_mount", var.factotum["data_dev"])} ${var.factotum["data"]} auto defaults,nofail,comment=terraform 0 2 >> /etc/fstab\""
-     */
+      "if [ \"${var.hysds_release}\" != \"develop\" ]; then",
+      "  curl -O \"https://cae-artifactory.jpl.nasa.gov/artifactory/${var.artifactory_repo}/gov/nasa/jpl/iems/sds/pcm/${var.hysds_release}/hysds-conda_env-${var.hysds_release}.tar.gz\"",
+      "  mkdir -p ~/conda",
+      "  tar xvfz hysds-conda_env-${var.hysds_release}.tar.gz -C conda",
+      "  export PATH=$HOME/conda/bin:$PATH",
+      "  conda-unpack",
+      "  rm -rf hysds-conda_env-${var.hysds_release}.tar.gz",
+      "  curl -O \"https://cae-artifactory.jpl.nasa.gov/artifactory/${var.artifactory_repo}/gov/nasa/jpl/iems/sds/pcm/${var.hysds_release}/hysds-verdi_venv-${var.hysds_release}.tar.gz\"",
+      "  tar xvfz hysds-verdi_venv-${var.hysds_release}.tar.gz",
+      "  rm -rf hysds-verdi_venv-${var.hysds_release}.tar.gz",
+      "fi",
     ]
   }
+
 }
 
 output "factotum_pvt_ip" {
