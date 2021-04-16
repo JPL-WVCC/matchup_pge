@@ -16,7 +16,7 @@ variable "counter" {
   default = "1"
 }
 variable "private_key_file" {
-   default = "~/.ssh/wvcc-pcm-dev.pem"
+   default = "/export/home/hysdsops/.ssh/wvcc-pcm-dev.pem"
 }
 
 variable "git_auth_key" {}
