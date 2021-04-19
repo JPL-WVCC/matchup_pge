@@ -1,5 +1,5 @@
 export artifactory_repo=general-develop
-export hysds_release=v3.0.0-rc7
+export hysds_release=v4.0.0
 export code_bucket=wvcc-dev-cc-fwd-leipan
 export dataset_bucket=wvcc-dev-rs-fwd-leipan
 export isl_bucket=wvcc-dev-isl-fwd-leipan
