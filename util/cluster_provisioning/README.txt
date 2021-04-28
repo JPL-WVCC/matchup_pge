@@ -19,6 +19,26 @@
   terraform destroy --var hysds_release=v4.0.0-rc.7 --var private_key_file=/export/home/hysdsops/.ssh/wvcc-pcm-dev.pem --var project=wvcc --var venue=leipan --var counter=1 --var git_auth_key=b2cb57ce8b3daa3f5c72a34a99d2cf1434b6c3ee --var jenkins_api_key=11114e63d8baded1bded892c01f8b91781 --var cluster_security_group_id=sg-029b5af59364a4b3c --var verdi_security_group_id=sg-0b4e1f7038191c5e1 --var asg_vpc=vpc-0db7a713a6785cd0f
 
 
+  terraform validate --var hysds_release=develop --var private_key_file=/export/home/hysdsops/.ssh/wvcc-pcm-dev.pem --var project=wvcc --var venue=leipan --var counter=1 --var git_auth_key=b2cb57ce8b3daa3f5c72a34a99d2cf1434b6c3ee --var jenkins_api_key=11114e63d8baded1bded892c01f8b91781 --var cluster_security_group_id=sg-029b5af59364a4b3c --var verdi_security_group_id=sg-0b4e1f7038191c5e1 --var asg_vpc=vpc-0db7a713a6785cd0f
+
+  terraform apply --var hysds_release=develop --var private_key_file=/export/home/hysdsops/.ssh/wvcc-pcm-dev.pem --var project=wvcc --var venue=leipan --var counter=1 --var git_auth_key=b2cb57ce8b3daa3f5c72a34a99d2cf1434b6c3ee --var jenkins_api_key=11114e63d8baded1bded892c01f8b91781 --var cluster_security_group_id=sg-029b5af59364a4b3c --var verdi_security_group_id=sg-0b4e1f7038191c5e1 --var asg_vpc=vpc-0db7a713a6785cd0f
+
+  terraform destroy --var hysds_release=develop --var private_key_file=/export/home/hysdsops/.ssh/wvcc-pcm-dev.pem --var project=wvcc --var venue=leipan --var counter=1 --var git_auth_key=b2cb57ce8b3daa3f5c72a34a99d2cf1434b6c3ee --var jenkins_api_key=11114e63d8baded1bded892c01f8b91781 --var cluster_security_group_id=sg-029b5af59364a4b3c --var verdi_security_group_id=sg-0b4e1f7038191c5e1 --var asg_vpc=vpc-0db7a713a6785cd0f
+
+
+. terraform commands for run under /export/home/hysdsops/github/nisar-pcm/cluster_provisioning/dev
+
+  terraform validate
+  terraform apply
+  terraform destroy
+
+
+
+
+
+
+
+
 . npm installation
 
   npm install sass-loader sass webpack --save-dev
@@ -60,6 +80,10 @@
 
   var.jenkins_api_key
   Enter a value: 11114e63d8baded1bded892c01f8b91781
+
+
+. how to ssh to the PCM servers
+  ssh -i ~/.ssh/wvcc-pcm-dev.pem hysdsops@<ip>
 
 
 . outputs
