@@ -19,17 +19,22 @@ variable "private_key_file" {
    default = "/export/home/hysdsops/.ssh/wvcc-pcm-dev.pem"
 }
 
-variable "git_auth_key" {}
+variable "git_auth_key" {
+  default = "b2cb57ce8b3daa3f5c72a34a99d2cf1434b6c3ee"
+}
+
 variable "jenkins_api_user" {
   default = ""
 }
 variable "jenkins_api_key" {
-  default = ""
+  default = "11114e63d8baded1bded892c01f8b91781"
 }
 
+/*
 variable "ops_password" {
   default = "ops"
 }
+*/
 
 variable "shared_credentials_file" {
   default = "~/.aws/credentials"
@@ -37,9 +42,11 @@ variable "shared_credentials_file" {
 #
 # "default" links to [default] profile in "shared_credentials_file" above
 #
+/*
 variable "profile" {
   default = "saml-pub"
 }
+*/
 # __key_name__ is the aws Key pair name
 variable "key_name" {
   default = "wvcc-pcm-dev"
@@ -49,6 +56,7 @@ variable "project" {
   default = "wvcc"
 }
 
+/*
 variable "region" {
   default = "us-west-2"
 }
@@ -56,9 +64,14 @@ variable "region" {
 variable "az" {
   default = "us-west-2a"
 }
+*/
 
 variable "subnet_id" {
   default = "subnet-058bb180c744135dc"
+}
+
+variable "cluster_security_group_id" {
+  default = "sg-029b5af59364a4b3c"
 }
 
 variable "vpc_security_group_ids" {
