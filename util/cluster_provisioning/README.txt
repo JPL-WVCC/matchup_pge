@@ -74,12 +74,8 @@ Outputs:
 
 ci_pub_ip = 100.67.45.139
 ci_pvt_ip = 100.67.45.139
-factotum_pub_ip =
-factotum_pvt_ip = 100.67.40.8
-grq_pub_ip =
-grq_pvt_ip = 100.67.43.56
-metrics_pub_ip =
-metrics_pvt_ip = 100.67.40.34
-mozart_pub_ip =
-mozart_pvt_ip = 100.67.42.96
 
+export MOZART_IP=100.67.40.101
+export FACTOTUM_IP=100.67.41.162
+export GRQ_IP=100.67.41.95
+export METRICS_IP=100.67.40.64
