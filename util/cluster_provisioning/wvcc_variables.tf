@@ -177,7 +177,8 @@ variable "factotum" {
   default = {
     name = "factotum"
     ami = "ami-04a53e3809bc4a9a5"
-    instance_type = "c3.xlarge"
+    instance_type = "r4.xlarge"
+  ###  instance_type = "c3.xlarge"
   #  docker_storage_dev = "/dev/xvdb"
   #  docker_storage_dev_size = 50
     data = "/data"
