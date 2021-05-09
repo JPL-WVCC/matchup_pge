@@ -1297,7 +1297,7 @@ resource "null_resource" "rs_fwd_add_lifecycle_rule" {
   }
 
   provisioner "remote-exec" {
-    inline = ["aws s3api put-bucket-lifecycle-configuration --bucket ${local.dataset_bucket} --lifecycle-configuration '${local.rs_fwd_lifecycle_configuration_json}'"]
+    ### inline = ["aws s3api put-bucket-lifecycle-configuration --bucket ${local.dataset_bucket} --lifecycle-configuration '${local.rs_fwd_lifecycle_configuration_json}'"]
   }
 
 }
@@ -1631,6 +1631,7 @@ resource "aws_instance" "factotum" {
   }
 
   provisioner "remote-exec" {
+    /*
     inline = [
       "if [ \"${var.hysds_release}\" != \"develop\" ]; then",
       "  curl -O \"https://cae-artifactory.jpl.nasa.gov/artifactory/${var.artifactory_repo}/gov/nasa/jpl/iems/sds/pcm/${var.hysds_release}/hysds-conda_env-${var.hysds_release}.tar.gz\"",
@@ -1644,6 +1645,7 @@ resource "aws_instance" "factotum" {
       "  rm -rf hysds-verdi_venv-${var.hysds_release}.tar.gz",
       "fi",
     ]
+    */
   }
 }
 
