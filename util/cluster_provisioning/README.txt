@@ -66,6 +66,17 @@
   ssh -i ~/.ssh/wvcc-pcm-dev.pem hysdsops@<ip>
 
 
+. if c3.xlarge is used for factotum, ssh to factotum would fail to connect, 
+  which is why switching to r4.xlarge (which is used for all other PCM servers)
+
+  Previous Generation Instance Details
+  Instance Type Processor Arch vCPU	Memory (GiB)	Instance Storage (GB)   EBS-optimized Available  Network Performance
+  c3.xlarge     64-bit         4        7.5             2 x 40                  Yes                      Moderate
+
+  r4.xlarge     64-bit         4        30.5                                                             Up to 10 Gigabit
+
+
+
 . outputs (outdated)
 ---- ran on Sun, 4/18/21 ----
 Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
@@ -79,3 +90,5 @@ export MOZART_IP=100.67.40.101
 export FACTOTUM_IP=100.67.41.162
 export GRQ_IP=100.67.41.95
 export METRICS_IP=100.67.40.64
+
+
