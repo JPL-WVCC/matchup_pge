@@ -30,3 +30,14 @@ osl_fwd_bucket: wvcc-dev-osl-fwd-leipan
 venue: leipan
 aws account: 293861788641
 
+
+
+--------- from Susan Neely 6/3/21 ---------
+
+if you are planning on backing up and launching a new cluster, you may wish to increase the disk space from 30 GB on the nodes
+and your new ami ids are
+mozart ami-06e70d2b695da7784
+metrics ami-036dbc4e5e449dc4a
+grq ami-04d8c34c8245995be
+factotum ami-02cf4271eaab67085
+verdi/autoscaling ami-0601c031b967d1e15

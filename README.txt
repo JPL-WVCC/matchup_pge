@@ -12,4 +12,5 @@
 . to run match up
   docker run --user 1000:ops -v /home/leipan/projects/aria_esi/wvcc/pge/data/collocation_output_1granule/test:/home/ops/data:rw -it matchup_pge /home/ops/matchup_pge/run_matchup.sh
 
+  docker run -v /home/leipan/projects/aria_esi/wvcc/pge/data/collocation_output_1granule/test:/home/ops/data:rw -it matchup_pge /home/ops/matchup_pge/run_matchup.sh
 
