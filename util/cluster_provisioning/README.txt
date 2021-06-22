@@ -139,9 +139,10 @@ ci_pvt_ip = 100.67.45.139
 ssh hysdsops@wvcc-pcm-ci.jpl.nasa.gov
 (This is where terraform scripts are, and where the singularity sandbox build scripts is)
 
-export MOZART_IP=100.67.40.101
-export FACTOTUM_IP=100.67.41.162
-export GRQ_IP=100.67.41.95
-export METRICS_IP=100.67.40.64
+(as of 6/22/21)
+export MOZART_IP=100.67.41.42
+export FACTOTUM_IP=100.67.40.120
+export GRQ_IP=100.67.43.241
+export METRICS_IP=100.67.41.48
 
 
