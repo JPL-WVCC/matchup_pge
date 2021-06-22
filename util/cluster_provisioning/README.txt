@@ -75,16 +75,69 @@
 
   r4.xlarge     64-bit         4        30.5                                                             Up to 10 Gigabit
 
+. supervisorctl status all
+
+. the shared CI web frontend:
+  https://wvcc-pcm-ci.jpl.nasa.gov/
+  (use JPL credentials to log in)
+
+. add jobs from mozart
+  sds ci add_job -b master -k https://github.com/leipan/matchup_pge.git s3
+  sds ci add_job -b singularity_dev -k https://github.com/aria-jpl/topsApp_pge.git s3
+
+. install singularity on ci
+# remove old version of singularity
+$ sudo rm -rf \
+    /usr/local/libexec/singularity \
+    /usr/local/var/singularity \
+    /usr/local/etc/singularity \
+    /usr/local/bin/singularity \
+    /usr/local/bin/run-singularity \
+    /usr/local/etc/bash_completion.d/singularity
+
+# when normal installation does not work, one can copy these files from an existing installation
+  cd /usr/local/libexec/
+  scp -r -i "~/.ssh/msas.pem" ops@54.167.55.23:/usr/local/libexec/singularity .
+  cd /usr/local/var/
+  scp -r -i "~/.ssh/msas.pem" ops@54.167.55.23:/usr/local/var/singularity .
+  cd /usr/local/etc/
+  scp -r -i "~/.ssh/msas.pem" ops@54.167.55.23:/usr/local/etc/singularity .
+  scp -r -i "~/.ssh/msas.pem" ops@54.167.55.23:/usr/local/etc/bash_completion.d/singularity .
+  cd /usr/local/bin/
+  scp -r -i "~/.ssh/msas.pem" ops@54.167.55.23:/usr/local/bin/singularity .
+  scp -r -i "~/.ssh/msas.pem" ops@54.167.55.23:/usr/local/bin/run-singularity .
+
+
+# SDSC instructions
+Step 1: run the script below to remove your existing Singularity:
+
+#!/bin/bash
+#
+# A cleanup script to remove Singularity
+
+sudo rm -rf /usr/local/libexec/singularity
+sudo rm -rf /usr/local/etc/singularity
+sudo rm -rf /usr/local/include/singularity  <--
+sudo rm -rf /usr/local/lib/singularity  <--
+sudo rm -rf /usr/local/var/lib/singularity/ <--
+sudo rm /usr/local/bin/singularity
+sudo rm /usr/local/bin/run-singularity
+sudo rm /usr/local/etc/bash_completion.d/singularity
+sudo rm /usr/local/man/man1/singularity.1 <--
 
 
 . outputs (outdated)
 ---- ran on Sun, 4/18/21 ----
 Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
 
+ssh -i ~/.ssh/wvcc-pcm-dev.pem hysdsops@<ip>
+
 Outputs:
 
 ci_pub_ip = 100.67.45.139
 ci_pvt_ip = 100.67.45.139
+ssh hysdsops@wvcc-pcm-ci.jpl.nasa.gov
+(This is where terraform scripts are, and where the singularity sandbox build scripts is)
 
 export MOZART_IP=100.67.40.101
 export FACTOTUM_IP=100.67.41.162
