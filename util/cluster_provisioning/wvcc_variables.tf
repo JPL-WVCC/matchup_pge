@@ -134,7 +134,7 @@ variable "mozart" {
   type = map
   default = {
     name = "mozart"
-    ami = "ami-034cac101413163d1"
+    ami = "ami-06e70d2b695da7784"
     instance_type = "r4.xlarge"
     data = "/data"
     data_dev = "/dev/xvdb"
@@ -150,7 +150,7 @@ variable "metrics" {
   type = map
   default = {
     name = "metrics"
-    ami = "ami-02b96854c127138c8"
+    ami = "ami-036dbc4e5e449dc4a"
     instance_type = "r4.xlarge"
     data = "/data"
     data_dev = "/dev/xvdb"
@@ -163,7 +163,7 @@ variable "grq" {
   type = map
   default = {
     name = "grq"
-    ami = "ami-024ab0dc53721534a"
+    ami = "ami-04d8c34c8245995be"
     instance_type = "r4.xlarge"
     data = "/data"
     data_dev = "/dev/xvdb"
@@ -176,7 +176,7 @@ variable "factotum" {
   type = map
   default = {
     name = "factotum"
-    ami = "ami-04a53e3809bc4a9a5"
+    ami = "ami-02cf4271eaab67085"
     instance_type = "r4.xlarge"
   ###  instance_type = "c3.xlarge"
   #  docker_storage_dev = "/dev/xvdb"
@@ -215,7 +215,7 @@ variable "autoscale" {
   type = map
   default = {
     name = "autoscale"
-    ami = "ami-07db5946dc5d4d6fa"
+    ami = "ami-0601c031b967d1e15"
     instance_type = "c3.large"
     docker_storage_dev = "/dev/xvdb"
     docker_storage_dev_size = 50
