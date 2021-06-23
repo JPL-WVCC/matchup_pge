@@ -117,12 +117,12 @@ variable "use_grq_aws_es_private_verdi" {
 variable "amis" {
   type = map(string)
   default = {
-    mozart    = "ami-034cac101413163d1"
-    metrics   = "ami-02b96854c127138c8"
-    grq       = "ami-024ab0dc53721534a"
-    factotum  = "ami-04a53e3809bc4a9a5"
+    mozart    = "ami-06e70d2b695da7784"
+    metrics   = "ami-036dbc4e5e449dc4a"
+    grq       = "ami-04d8c34c8245995be"
+    factotum  = "ami-02cf4271eaab67085"
     ci        = ""
-    autoscale = "ami-07db5946dc5d4d6fa"
+    autoscale = "ami-0601c031b967d1e15"
   }
 }
 
