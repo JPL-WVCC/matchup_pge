@@ -18,6 +18,10 @@
   terraform apply
   terraform destroy
 
+. note: the ami definations are in 
+  modules/common/variables.tf
+  but not in
+  wvcc_variables.tf
 
 . npm installation (outdated)
 
