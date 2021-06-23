@@ -41,3 +41,8 @@ metrics ami-036dbc4e5e449dc4a
 grq ami-04d8c34c8245995be
 factotum ami-02cf4271eaab67085
 verdi/autoscaling ami-0601c031b967d1e15
+
+. note: the ami definations are in
+  modules/common/variables.tf
+  but not in
+  wvcc_variables.tf
