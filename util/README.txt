@@ -114,3 +114,13 @@
   and copy this file to pleiades /home1/lpan/github/job_worker-singularity/datasets.json.wvcc
   after done
 
+. backup from the old mozart
+  on weather
+  cd /raid15/leipan/ingest/backup_from_old_mozart
+  rsync -rave  "ssh -i ~/.ssh/msas.pem" -a ops@3.84.50.148:/data/input .
+
+  cp to the new mozart
+  rsync -rave  "ssh -i ~/.ssh/wvcc-pcm-dev.pem" -a input hysdsops@100.67.40.192:/data/.
+
+
+
