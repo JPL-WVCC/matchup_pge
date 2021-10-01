@@ -62,3 +62,18 @@
   source wvcc.bashrc
   celery worker --app=hysds --concurrency=1 --loglevel=INFO -Q pleiades_job_worker-small -n 1000 -O fair --without-mingle --without-gossip --heartbeat-interval=60
 
+. to get access to wvcc s3 buckets (wvcc-matchup-code and wvcc-matchup-data)
+  ssh higgs
+  python /home/leipan/projects/aria_esi/Access-Key-Generation/aws-login-pub.py
+  pick 168683381162
+  https://github.jpl.nasa.gov/cloud/Access-Key-Generation
+  copy the credentials under [saml-pub] to ~/.aws/credentials
+  on pleiades under /home1/lpan, and make it [default]
+
+. to develop and integrate the wvcc product dataset
+  (see Step 6 of HySDS tutorial)
+  on mozart of wvcc
+  ~/mozart/etc/datasets.json
+  and copy this file to pleiades /home1/lpan/github/job_worker-singularity/datasets.json.wvcc
+  after done
+
