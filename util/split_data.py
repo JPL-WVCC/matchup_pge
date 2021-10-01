@@ -42,11 +42,14 @@ if __name__ == '__main__':
 
   ingest_dir_root = '/raid15/leipan/ingest'
 
+  """
   dataDir1=os.path.join(ingest_dir_root, 'VIIRS')
   ### print ('dataDir1: ', dataDir1)
 
   list1 = sorted([os.path.join(dataDir1, name) for name in os.listdir(dataDir1) if os.path.isdir(os.path.join(dataDir1, name))])
   move_to_split(list1, dataDir1)
+
+  """
 
   dataDir2=os.path.join(ingest_dir_root, 'CrIS')
   list2 = sorted([os.path.join(dataDir2, name) for name in os.listdir(dataDir2) if os.path.isdir(os.path.join(dataDir2, name))])

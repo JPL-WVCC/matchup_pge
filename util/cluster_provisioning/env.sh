@@ -1,0 +1,13 @@
+export artifactory_repo=general-develop
+export hysds_release=v4.0.0
+export code_bucket=wvcc-dev-cc-fwd-leipan
+export dataset_bucket=wvcc-dev-rs-fwd-leipan
+export isl_bucket=wvcc-dev-isl-fwd-leipan
+export triage_bucket=wvcc-dev-triage-fwd-leipan
+export lts_bucket=wvcc-dev-lts-fwd-leipan
+export osl_bucket=wvcc-dev-osl-fwd-leipan
+export docker_registry_bucket=wvcc-dev-cc-fwd-leipan
+export use_artifactory=False
+export pcm_commons_branch=develop
+export git_auth_key=b2cb57ce8b3daa3f5c72a34a99d2cf1434b6c3ee
+export pcm_commons_repo=github.jpl.nasa.gov/IEMS-SDS/pcm_commons.git
