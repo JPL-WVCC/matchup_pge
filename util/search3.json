@@ -1,0 +1,6 @@
+{"query":{
+             "bool":{
+               "must":{"term":{"dataset_type.raw":"CRIS-data"}}
+             }
+         }
+}
