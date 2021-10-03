@@ -33,6 +33,7 @@
 
   tar zcvf ~/matchup_cris_viirs.tar.gz ingest_matchup.sh matchup_cris_viirs_20150601T201500_20150601T205500
   scp -i ~/.ssh/msas.pem ~/matchup_cris_viirs.tar.gz ops@3.84.50.148:/data/input/.
+  (now backed up here: /raid15/leipan/ingest/backup_from_old_mozart/input/tmp/matchup_cris_viirs.tar.gz)
 
   then goto mozart to run: sh ingest_matchup.sh
 
@@ -121,6 +122,65 @@
 
   cp to the new mozart
   rsync -rave  "ssh -i ~/.ssh/wvcc-pcm-dev.pem" -a input hysdsops@100.67.40.192:/data/.
+
+
+. ---------- new WVCC PCM cluster ------
+
+. ci instance
+  from higgs:
+  ssh hysdsops@wvcc-pcm-ci.jpl.nasa.gov
+
+. mozart instance
+  ssh -i ~/.ssh/wvcc-pcm-dev.pem hysdsops@100.67.40.192
+
+. ingest from mozart
+  ssh -i ~/.ssh/wvcc-pcm-dev.pem hysdsops@100.67.40.192
+  cp datasets.json.wvcc(from this dir) ~/mozart/etc/datasets.json (to mozart)
+  cd /data/input/VIIRS
+  sh ing_test.sh 
+  cd /data/input/CrIS/2
+  sh ingest_script.sh
+
+. from a browser
+  test if mozart is up
+  https://100.67.40.192/grq_es/
+  the tosca GUI
+  https://100.67.40.192/hysds_ui
+  the figaro GUI
+  https://100.67.40.192/hysds_ui/figaro
+
+. command line
+  prepare a ES query clause, such as this search3.json:
+  {"query":{
+               "bool":{
+                 "must":{"match":{"dataset_type":"CRIS-data"}}
+               }
+           }
+  }
+  and run in the PCM cluster (e.g., on mozart) this command
+  curl -k -H "Content-Type: application/json" -X POST -d @search3.json "https://100.67.40.192/grq_es/grq/_search"
+
+  {"took":3,"timed_out":false,"_shards":{"total":16,"successful":16,"skipped":0,"failed":0},"hits":{"total":{"value":2,"relation":"eq"},"max_score":0.723315,"hits":[{"_index":"grq_v1.0_sndr.snpp.cris","_type":"_doc","_id":"SNDR.SNPP.CRIS.20150621T0000.m06.g001.L1B_NSR.std.v02_05.G.180907210738","_score":0.723315,
+
+  curl -XDELETE "http://52.91.25.28:9200/{_index}/{_type}/{_id}"
+
+  curl -k -XDELETE "https://100.67.40.192/grq_es/grq/grq_v1.0_sndr.snpp.cris/SNDR.SNPP.CRIS/SNDR.SNPP.CRIS.20150621T000.m06.g035.L1B_NSR.std.v02_05.G.180907210738"
+  ('Unauthorized')
+
+  curl -k -XDELETE "https://100.67.40.192/grq_es/grq/grq_v1.0_sndr.snpp.cris/CRIS-data/SNDR.SNPP.CRIS.20150621T0000.m06.g001.L1B_NSR.std.v02_05.G.180907210738"
+  (401 Unauthorized)
+
+  curl --cacert /home/leipan/.ssh/wvcc-pcm-dev.pem --capath /home/leipan/.ssh/ -XDELETE "https://100.67.40.192/grq_es/grq/grq_v1.0_sndr.snpp.cris/CRIS-data/SNDR.SNPP.CRIS.20150621T0000.m06.g001.L1B_NSR.std.v02_05.G.180907210738"
+  curl: (77) error setting certificate verify locations:
+    CAfile: /home/leipan/.ssh/wvcc-pcm-dev.pem
+    CApath: /home/leipan/.ssh/
+
+
+. to generate matchup input dataset on top of the granules, goto weather
+  cd $HOME/pge/matchup_pge/util/
+  python wvcc_evaluator.py
+  to generate a script ingest_matchup.sh along with the input matchup datasets
+  which we take to mozart to run
 
 
 
