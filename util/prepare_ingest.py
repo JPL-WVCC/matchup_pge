@@ -62,14 +62,21 @@ def create_dataset(files, ingest_dir_root, script_file):
 
 if __name__ == '__main__':
 
-  ingest_dir_root = '/raid15/leipan/ingest'
+  ingest_dir_root = '/raid15/leipan/ingest/20211112/'
   if os.path.exists(ingest_dir_root) == False:
     os.mkdir(ingest_dir_root)
 
   ### dataDir2='/peate_archive/.data6/Ops/snpp/gdisc/2/2015/06/01/crisl1b/'
-  dataDir2='/peate_archive/.data6/Ops/snpp/gdisc/2/2015/06/'
+  ### dataDir2='/peate_archive/.data6/Ops/snpp/gdisc/2/2015/06/'
+  ### dataDir2='/raid15/leipan/CrIS/201710/'
+  # two months for Qing
+  ### dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2017/10/'
+  dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2020/08/'
+
   ### dataDir4='/raid15/qyue/VIIRS/VIIRS/20150601/'
-  dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2015/'
+  ### dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2015/'
+  # two months for Qing
+  dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2017/010/'
  
   ### script_filename = "ingest_script_viirs.sh"
   script_filename = "ingest_script_cris.sh"
@@ -79,13 +86,13 @@ if __name__ == '__main__':
   # get CrIS files
   ### cris_geo_files = sorted(glob.glob(dataDir2+'SNDR*1809042004*'))
   cris_geo_files = sorted(glob.glob(dataDir2+'**/**/SNDR.SNPP.CRIS*L1B_NSR*'+ext))
-  ### print ('cris_geo_files: ', cris_geo_files)
+  print ('cris_geo_files: ', cris_geo_files)
   create_dataset(cris_geo_files, ingest_dir_root, scriptfile1)
 
   # get VIIRS files
   ### viirs_geo_files = sorted(glob.glob(dataDir4+'VNP03MOD*201726106455*'))
   """
-  viirs_geo_files = sorted(glob.glob(dataDir4+'**/VNP03MOD*'+ext))
+  viirs_geo_files = sorted(glob.glob(dataDir4+'/VNP03MOD*'+ext))
   print ('viirs_geo_files: ', viirs_geo_files)
   create_dataset(viirs_geo_files, ingest_dir_root, scriptfile1)
   """
