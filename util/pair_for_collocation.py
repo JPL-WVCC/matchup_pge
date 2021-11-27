@@ -12,12 +12,12 @@ import stat
 ext = '.nc'
 
 # --------------------------------------
-def create_dataset(files, ingest_dir_root, script_file):
+def pair_create_dataset(cris_files, viirs_files, output_dir_root):
 
-  for f1 in files:
+  for f1 in cris_files:
     ### print ('f1: ', f1)
     basename1 = os.path.splitext(os.path.basename(f1))[0]
-    dir1 = os.path.join(ingest_dir_root, basename1)
+    dir1 = os.path.join(output_dir_root, basename1)
     print ('dir1: ', dir1)
 
     if os.path.exists(dir1):
@@ -26,79 +26,65 @@ def create_dataset(files, ingest_dir_root, script_file):
     shutil.copyfile(f1, os.path.join(dir1, basename1+ext))
 
     f = nc4.Dataset(f1, 'r')
-    ### print (f.time_coverage_start)
-    ### print (f.time_coverage_end)
-    ### print (f.geospatial_bounds)
+    ### print ('starttime: ', f.time_coverage_start)
+    ### print ('endtime: ', f.time_coverage_end)
+    ### print ('bounds: ', f.geospatial_bounds)
 
-    # create minimal dataset JSON file
-    dataset_json_file = os.path.join(dir1, basename1+'.dataset.json')
+    # 2017-10-01T00:00:00Z
+    starttime = datetime.strptime(f.time_coverage_start, '%Y-%m-%dT%H:%M:%SZ')
+    endtime = datetime.strptime(f.time_coverage_end, '%Y-%m-%dT%H:%M:%SZ')
+    print ('starttime: ', starttime)
+    print ('endtime: ', endtime)
 
-    now = datetime.now()
-    datetime1 = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    print ('---------------')
+    for f2 in viirs_files:
+      ff = nc4.Dataset(f2, 'r')
+      ### print ('v starttime: ', ff.time_coverage_start)
+      ### print ('v endtime: ', ff.time_coverage_end)
+      ### print ('v south bound: ', ff.SouthBoundingCoordinate)
 
-    dataset_dict = {"version": "v1.0",
-                    "label": basename1,
-                    "starttime": f.time_coverage_start,
-                    "endtime": f.time_coverage_end,
-                    "creation_timestamp": datetime1
-                   }
+      v_starttime = datetime.strptime(ff.time_coverage_start, '%Y-%m-%dT%H:%M:%S.000Z')
+      v_endtime = datetime.strptime(ff.time_coverage_end, '%Y-%m-%dT%H:%M:%S.000Z')
 
-    json_object = json.dumps(dataset_dict, indent = 4) 
+      ### print ('v starttime: ', v_starttime)
+      ### print ('v endtime: ', v_endtime)
 
-    with open(dataset_json_file, "w") as outfile: 
-      outfile.write(json_object)
+      if starttime <= v_endtime and endtime >= v_starttime:
+        print ('v starttime: ', v_starttime)
+        print ('v endtime: ', v_endtime)
+        shutil.copyfile(f2, os.path.join(dir1, os.path.basename(f2)))
 
-    # create minimal metadata file
-    metadata_json_file=os.path.join(dir1, basename1+'.met.json')
-    m_file = open(metadata_json_file, 'w')
-    m_file.write('{}')
-    m_file.write('\n')
-    m_file.close()
-
-    script_file.write('~/mozart/ops/hysds/scripts/ingest_dataset.py %s ~/mozart/etc/datasets.json\n' % dir1)
-
+    ### sys.exit()
 
 
 
 if __name__ == '__main__':
 
-  ingest_dir_root = '/raid15/leipan/ingest/20211112/'
-  if os.path.exists(ingest_dir_root) == False:
-    os.mkdir(ingest_dir_root)
+  pair_dir_root = '/raid15/leipan/pair/20211126/'
+  if os.path.exists(pair_dir_root) == False:
+    os.makedirs(pair_dir_root)
 
-  ### dataDir2='/peate_archive/.data6/Ops/snpp/gdisc/2/2015/06/01/crisl1b/'
-  ### dataDir2='/peate_archive/.data6/Ops/snpp/gdisc/2/2015/06/'
-  ### dataDir2='/raid15/leipan/CrIS/201710/'
   # two months for Qing
   ### dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2017/10/'
-  dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2020/08/'
-
-  ### dataDir4='/raid15/qyue/VIIRS/VIIRS/20150601/'
-  ### dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2015/'
-  # two months for Qing
+  ### dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2020/08/'
   dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2017/010/'
+  viirs_geo_files = sorted(glob.glob(dataDir4+'VNP03MOD.*'+ext))
+  ### print ('viirs_geo_files: ', viirs_geo_files)
  
-  ### script_filename = "ingest_script_viirs.sh"
-  script_filename = "ingest_script_cris.sh"
-  scriptfile1 = open(script_filename, "w")
-  scriptfile1.write('#!/usr/bin/env bash\n')
-
   # get CrIS files
+  dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2017/10/'
   ### cris_geo_files = sorted(glob.glob(dataDir2+'SNDR*1809042004*'))
   cris_geo_files = sorted(glob.glob(dataDir2+'**/**/SNDR.SNPP.CRIS*L1B_NSR*'+ext))
-  print ('cris_geo_files: ', cris_geo_files)
-  create_dataset(cris_geo_files, ingest_dir_root, scriptfile1)
+  ### print ('cris_geo_files: ', cris_geo_files)
+
+  pair_create_dataset(cris_geo_files, viirs_geo_files, pair_dir_root)
 
   # get VIIRS files
   ### viirs_geo_files = sorted(glob.glob(dataDir4+'VNP03MOD*201726106455*'))
   """
   viirs_geo_files = sorted(glob.glob(dataDir4+'/VNP03MOD*'+ext))
   print ('viirs_geo_files: ', viirs_geo_files)
-  create_dataset(viirs_geo_files, ingest_dir_root, scriptfile1)
+  create_dataset(viirs_geo_files, pair_dir_root, scriptfile1)
   """
 
-  scriptfile1.close()
-
-  st = os.stat(script_filename)
-  os.chmod(script_filename, st.st_mode | stat.S_IEXEC)
 
