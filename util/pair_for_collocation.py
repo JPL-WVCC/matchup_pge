@@ -79,12 +79,3 @@ if __name__ == '__main__':
 
   pair_create_dataset(cris_geo_files, viirs_geo_files, pair_dir_root)
 
-  # get VIIRS files
-  ### viirs_geo_files = sorted(glob.glob(dataDir4+'VNP03MOD*201726106455*'))
-  """
-  viirs_geo_files = sorted(glob.glob(dataDir4+'/VNP03MOD*'+ext))
-  print ('viirs_geo_files: ', viirs_geo_files)
-  create_dataset(viirs_geo_files, pair_dir_root, scriptfile1)
-  """
-
-
