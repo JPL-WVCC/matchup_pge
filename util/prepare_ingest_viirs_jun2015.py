@@ -62,13 +62,16 @@ def create_dataset(dirpath, files, ingest_dir_root, script_file):
 
     script_file.write('~/mozart/ops/hysds/scripts/ingest_dataset.py %s ~/mozart/etc/datasets.json\n' % dir1)
 
+    ### sys.exit()
+
 
 
 
 if __name__ == '__main__':
 
-  src_dir = '/raid15/leipan/VIIRS/VNP03MOD/2015/'
-  ingest_dir_root = '/raid15/leipan/ingest/VIIRS/'
+  ### src_dir = '/raid15/leipan/VIIRS/VNP03MOD/2015/'
+  src_dir = '/raid15/leipan/VIIRS/VNP03MOD/2017/'
+  ingest_dir_root = '/raid15/leipan/ingest/VIIRS/2017/'
 
   script_filename = "ingest_script_viirs.sh"
   scriptfile1 = open(script_filename, "w")
@@ -81,13 +84,15 @@ if __name__ == '__main__':
       dirpath_basename_num = int(dirpath_basename)
       ### print ('dirpath_basename_num: ', dirpath_basename_num)
       # in 2015, DOY 149 is 5/29 and DOY 184 is 7/3
-      if dirpath_basename_num > 149 and dirpath_basename_num < 184:
-        print ('--------------')
+      ### if dirpath_basename_num > 149 and dirpath_basename_num < 184:
+      if dirpath_basename_num == 10: # to ingest 2017/10
+        ### print ('--------------')
         ### print ('dirpath: ', dirpath)
         ### print ('dirnames: ', dirnames)
         ### print ('filenames: ', filenames)
         create_dataset(dirpath, filenames, ingest_dir_root, scriptfile1)
 
+  scriptfile1.close()
 
 
 
