@@ -84,7 +84,7 @@ def pair_create_dataset(cris_files, viirs_dir, output_dir_root):
         print ('v endtime: ', v_endtime)
         shutil.copyfile(f2, os.path.join(dir1, os.path.basename(f2)))
 
-    sys.exit()
+    ### sys.exit()
 
 
 
