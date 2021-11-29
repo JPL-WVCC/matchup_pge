@@ -14,18 +14,18 @@ import stat
 ext = '.nc'
 
 # --------------------------------------
-def pair_one_cris(cris_file, viirs_dir, output_dir_root):
+def pair_one_cris(cris_file, viirs_dir, output_dir_root, day1):
 
   if True:
     f1 = cris_file
     ### print ('f1: ', f1)
     basename1 = os.path.splitext(os.path.basename(f1))[0]
-    dir1 = os.path.join(output_dir_root, basename1)
+    dir1 = os.path.join(output_dir_root, day1, basename1)
     ### print ('dir1: ', dir1)
 
     if os.path.exists(dir1):
       shutil.rmtree(dir1)
-    os.mkdir(dir1)
+    os.makedirs(dir1)
     shutil.copyfile(f1, os.path.join(dir1, basename1+ext))
 
     f = nc4.Dataset(f1, 'r')
@@ -74,11 +74,6 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root):
         """
         shutil.copyfile(f2, os.path.join(dir1, os.path.basename(f2)))
 
-    # check to make sure that under dir1 there are 4 files
-    cnt = len([name for name in os.listdir(dir1) if os.path.isfile(name)])
-    if cnt != 4:
-      print('Warning: there are {0} files under {1}, not 4 as expected!'.format(cnt, dir1))
-
     # spawn co-location child process
     cmd = '/home/leipan/anaconda3/bin/python /home/leipan/code_test_QY.py'
     p1 = subprocess.Popen(cmd, shell=True, cwd=dir1, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -86,22 +81,39 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root):
     print('out: ', out)
     print('err: ', err)
 
+    # check to make sure that under dir1 there are 4 files
+    """
+    cnt = len([name for name in os.listdir(dir1) if os.path.isfile(name)])
+    if cnt != 4:
+      print('Warning: there are {0} files under {1}, not 4 as expected!'.format(cnt, dir1))
+
+    for name in os.listdir(dir1):
+      if os.path.isdir(name):
+        cnt = len([name for name in os.listdir(os.path.join(dir1, name)) if os.path.isfile(name)])
+        if cnt != 3:
+          print('Warning: there are {0} files under {1}, not 4 as expected!'.format(cnt, os.path.join(dir1, name)))
+    """
+
 
 
 if __name__ == '__main__':
 
-  pair_dir_root = '/raid15/leipan/pair/202008/'
+  chunk_size = 30
+
+  ### pair_dir_root = '/raid15/leipan/pair/202008/'
+  pair_dir_root = '/raid15/leipan/pair/201710/'
+
   if os.path.exists(pair_dir_root) == False:
     os.makedirs(pair_dir_root)
 
   # two months for Qing
   # 2017/10
-  ### dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2017/'
-  ### dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2017/10/'
+  dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2017/'
+  dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2017/10/'
 
   # 2020/08
-  dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2020/'
-  dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2020/08/'
+  ### dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2020/'
+  ### dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2020/08/'
 
   ### viirs_geo_files = sorted(glob.glob(dataDir4+'VNP03MOD.*'+ext))
   ### print ('viirs_geo_files: ', viirs_geo_files)
@@ -111,22 +123,24 @@ if __name__ == '__main__':
   ### cris_geo_files = sorted(glob.glob(dataDir2+'**/**/SNDR.SNPP.CRIS*L1B_NSR*'+ext))
   ### print ('cris_geo_files: ', cris_geo_files)
 
-  ### for mon in range (2, 3):
-  for mon in range (1, 32):
-    mon1 = str(mon).zfill(2)
-    ### print('mon1: ', mon1)
-    cris_geo_files = sorted(glob.glob(dataDir2+mon1+'/'+'**/SNDR.SNPP.CRIS*L1B_NSR*'+ext))
+  ### for day in range (1, 32):
+  for day in range (1, 2):
+    day1 = str(day).zfill(2)
+    ### print('day1: ', day1)
+    cris_geo_files = sorted(glob.glob(dataDir2+day1+'/'+'**/SNDR.SNPP.CRIS*L1B_NSR*'+ext))
     ### print ('cris_geo_files: ', cris_geo_files)
     ### print ('len(cris_geo_files): ', len(cris_geo_files))
 
-    processes = []
-    for cris_file in cris_geo_files:
-      p1 = Process(target=pair_one_cris, args=(cris_file, dataDir4, pair_dir_root))
-      processes.append(p1)
+    chunks = [cris_geo_files[x:x+chunk_size] for x in range(0, len(cris_geo_files), chunk_size)]
+    for cris_files in chunks:
+      processes = []
+      for cris_file in cris_files:
+        p1 = Process(target=pair_one_cris, args=(cris_file, dataDir4, pair_dir_root, day1))
+        processes.append(p1)
 
-    for p in processes:
-      p.start()
+      for p in processes:
+        p.start()
 
-    for p in processes:
-      p.join()
+      for p in processes:
+        p.join()
 
