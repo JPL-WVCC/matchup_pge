@@ -32,8 +32,8 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root):
     # 2017-10-01T00:00:00Z
     starttime = datetime.strptime(f.time_coverage_start, '%Y-%m-%dT%H:%M:%SZ')
     endtime = datetime.strptime(f.time_coverage_end, '%Y-%m-%dT%H:%M:%SZ')
-    print ('starttime: ', starttime)
-    print ('endtime: ', endtime)
+    ### print ('starttime: ', starttime)
+    ### print ('endtime: ', endtime)
 
     # get the 3 consecutive days that span the cris date
     # get all the viirs files in those 3 days
@@ -57,7 +57,7 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root):
     viirs_files = viirs_geo_files1+viirs_geo_files2+viirs_geo_files3
     ### print('viirs_files: ', viirs_files)
 
-    print ('---------------')
+    ### print ('---------------')
 
     for f2 in viirs_files:
       ### print ('f2: ', f2)
@@ -68,8 +68,10 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root):
       ### print ('v endtime: ', v_endtime)
 
       if starttime <= v_endtime and endtime >= v_starttime:
+        """
         print ('v starttime: ', v_starttime)
         print ('v endtime: ', v_endtime)
+        """
         shutil.copyfile(f2, os.path.join(dir1, os.path.basename(f2)))
 
     # check to make sure that under dir1 there are 4 files
@@ -79,7 +81,7 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root):
 
     # spawn co-location child process
     cmd = '/home/leipan/anaconda3/bin/python /home/leipan/code_test_QY.py'
-    p1 = subprocess.Popen(cmd, shell=False, cwd=dir1, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    p1 = subprocess.Popen(cmd, shell=True, cwd=dir1, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
     out, err = p1.communicate()
     print('out: ', out)
     print('err: ', err)
@@ -88,7 +90,7 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root):
 
 if __name__ == '__main__':
 
-  pair_dir_root = '/raid15/leipan/pair/20211129/'
+  pair_dir_root = '/raid15/leipan/pair/202008/'
   if os.path.exists(pair_dir_root) == False:
     os.makedirs(pair_dir_root)
 
