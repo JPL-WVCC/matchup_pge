@@ -123,8 +123,7 @@ if __name__ == '__main__':
   ### cris_geo_files = sorted(glob.glob(dataDir2+'**/**/SNDR.SNPP.CRIS*L1B_NSR*'+ext))
   ### print ('cris_geo_files: ', cris_geo_files)
 
-  ### for day in range (1, 32):
-  for day in range (1, 2):
+  for day in range (1, 32):
     day1 = str(day).zfill(2)
     ### print('day1: ', day1)
     cris_geo_files = sorted(glob.glob(dataDir2+day1+'/'+'**/SNDR.SNPP.CRIS*L1B_NSR*'+ext))
