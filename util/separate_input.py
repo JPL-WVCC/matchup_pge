@@ -29,7 +29,7 @@ def move_input_granules(src_input_dir_root, input_dir_root):
     if cnt1 > 3:
       break
     """
-    day1 = d1.split('/')[-1]  $'01'
+    day1 = d1.split('/')[-1]  # '01'
     print ('day1: ', day1)
     cris_name_subdirs = sorted(glob.glob(d1+'/**'))
     ### print ('cris_name_subdirs: ', cris_name_subdirs)
