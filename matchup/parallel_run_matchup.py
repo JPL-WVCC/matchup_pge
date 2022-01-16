@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from multiprocessing import Process
+import multiprocessing
 import subprocess
 import glob
 import time
@@ -98,7 +99,10 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root, day1):
 
 if __name__ == '__main__':
 
-  chunk_size = 30
+  # how many total cores to use for parallel processing
+  chunk_size = multiprocessing.cpu_count()
+  if chunk_size > 36:
+    chunk_size = 36
 
   ### pair_dir_root = '/raid15/leipan/pair/202008/'
   pair_dir_root = '/raid15/leipan/pair/201710/'
