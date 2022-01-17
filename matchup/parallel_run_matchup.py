@@ -11,6 +11,8 @@ import json
 from datetime import datetime,timedelta
 import os
 import stat
+import argparse
+
 
 ext = '.nc'
 
@@ -99,40 +101,70 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root, day1):
 
 if __name__ == '__main__':
 
+  start_time = time.time()
+
+  parser = argparse.ArgumentParser(description='Process co-location of CrIS and VIIRS.')
+  parser.add_argument('--y', metavar='YEAR', type=int, required=True, help='year')
+  parser.add_argument('--m', metavar='MONTH', type=int, required=True, help='month')
+  parser.add_argument('--d1', metavar='START DAY', type=int, required=True, help='start day')
+  parser.add_argument('--d2', metavar='END DAY', type=int, required=True, help='end day')
+  parser.add_argument('--cr', metavar='CrIS Root Dir', type=str, const='/peate_archive/NPPOps/snpp/gdisc/2/', help='CrIS root dir', nargs='?')
+  parser.add_argument('--vr', metavar='VIIRS Root Dir', type=str, const='/raid15/leipan/VIIRS/VNP03MOD/', help='VIIRS root dir', nargs='?')
+  parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/pair/20220116/', help='product root dir', nargs='?')
+  parser.add_argument('--c', metavar='CPU COUNT', type=int, const=36, help='CPU count', nargs='?')
+  args = parser.parse_args()
+
+  print('year: ', args.y)
+  print('month: ', args.m)
+  print('start day: ', args.d1)
+  print('end day: ', args.d2)
+  print('CrIS root dir: ', args.cr)
+  print('VIIRS root dir: ', args.vr)
+  print('product root dir: ', args.pr)
+  print('CPU count: ', args.c)
+
+
   # how many total cores to use for parallel processing
   chunk_size = multiprocessing.cpu_count()
-  if chunk_size > 36:
-    chunk_size = 36
+  if chunk_size > args.c:
+    chunk_size = args.c
 
-  ### pair_dir_root = '/raid15/leipan/pair/202008/'
-  pair_dir_root = '/raid15/leipan/pair/201710/'
+  if args.pr == None:
+    args.pr = '/raid15/leipan/products/20210116/'
+  if args.cr == None:
+    args.cr = '/peate_archive/NPPOps/snpp/gdisc/2/'
+  if args.vr == None:
+    args.vr = '/raid15/leipan/VIIRS/VNP03MOD/'
 
-  if os.path.exists(pair_dir_root) == False:
-    os.makedirs(pair_dir_root)
+  print('CrIS root dir: ', args.cr)
+  print('VIIRS root dir: ', args.vr)
+  print('product root dir: ', args.pr)
 
-  # two months for Qing
-  # 2017/10
-  dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2017/'
-  dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2017/10/'
-
-  # 2020/08
-  ### dataDir4='/raid15/leipan/VIIRS/VNP03MOD/2020/'
-  ### dataDir2='/peate_archive/NPPOps/snpp/gdisc/2/2020/08/'
+  if os.path.exists(args.pr) == False:
+    os.makedirs(args.pr)
 
   ### viirs_geo_files = sorted(glob.glob(dataDir4+'VNP03MOD.*'+ext))
   ### print ('viirs_geo_files: ', viirs_geo_files)
  
-  # get CrIS files
-  ### cris_geo_files = sorted(glob.glob(dataDir2+'SNDR*1809042004*'))
-  ### cris_geo_files = sorted(glob.glob(dataDir2+'**/**/SNDR.SNPP.CRIS*L1B_NSR*'+ext))
-  ### print ('cris_geo_files: ', cris_geo_files)
+  """
+  cris_geo_files = sorted(glob.glob(args.cr+str(args.y)+'/**/**/crisl1b/SNDR.SNPP.CRIS*L1B.std*'+ext))
+  print ('cris_geo_files: ', cris_geo_files)
+  print ('len(cris_geo_files): ', len(cris_geo_files))
+  """
 
-  for day in range (1, 32):
+  print("done in --- %.2f seconds --- " % (float(time.time() - start_time)))
+
+  month1 = str(args.m).zfill(2)
+
+  for day in range (args.d1, args.d2+1):
     day1 = str(day).zfill(2)
-    ### print('day1: ', day1)
-    cris_geo_files = sorted(glob.glob(dataDir2+day1+'/'+'**/SNDR.SNPP.CRIS*L1B_NSR*'+ext))
-    ### print ('cris_geo_files: ', cris_geo_files)
-    ### print ('len(cris_geo_files): ', len(cris_geo_files))
+    print('day1: ', day1)
+    print(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS')
+    cris_geo_files = sorted(glob.glob(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS*L1B.std*'+ext))
+    print ('cris_geo_files: ', cris_geo_files)
+    print ('len(cris_geo_files): ', len(cris_geo_files))
+
+    sys.exit()
 
     chunks = [cris_geo_files[x:x+chunk_size] for x in range(0, len(cris_geo_files), chunk_size)]
     for cris_files in chunks:
