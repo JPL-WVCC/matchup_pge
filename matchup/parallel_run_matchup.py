@@ -17,9 +17,16 @@ import argparse
 ext = '.nc'
 
 # --------------------------------------
-def pair_one_cris(cris_file, viirs_dir, output_dir_root, day1):
+def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
+
+  print (' --------- viirs_dir: ', viirs_dir)
 
   if True:
+    cris_files = []
+    cris_files.append(cris_file)
+    ### print('type(cris_files): ', type(cris_files))
+    print('cris_files: ', cris_files)
+
     f1 = cris_file
     ### print ('f1: ', f1)
     basename1 = os.path.splitext(os.path.basename(f1))[0]
@@ -29,14 +36,14 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root, day1):
     if os.path.exists(dir1):
       shutil.rmtree(dir1)
     os.makedirs(dir1)
-    shutil.copyfile(f1, os.path.join(dir1, basename1+ext))
+
+    ### shutil.copyfile(f1, os.path.join(dir1, basename1+ext))
 
     f = nc4.Dataset(f1, 'r')
     # 2017-10-01T00:00:00Z
     starttime = datetime.strptime(f.time_coverage_start, '%Y-%m-%dT%H:%M:%SZ')
     endtime = datetime.strptime(f.time_coverage_end, '%Y-%m-%dT%H:%M:%SZ')
-    ### print ('starttime: ', starttime)
-    ### print ('endtime: ', endtime)
+    print ('starttime: ', starttime, ' , endtime: ', endtime)
 
     # get the 3 consecutive days that span the cris date
     # get all the viirs files in those 3 days
@@ -58,31 +65,41 @@ def pair_one_cris(cris_file, viirs_dir, output_dir_root, day1):
     viirs_geo_files3 = sorted(glob.glob(viirs_dir+str(day_of_year_p1).zfill(3)+'/'+'VNP03MOD.*'+ext))
 
     viirs_files = viirs_geo_files1+viirs_geo_files2+viirs_geo_files3
+    """
+    print('type(viirs_files): ', type(viirs_files))
+    """
+    print('len(viirs_files): ', len(viirs_files))
     ### print('viirs_files: ', viirs_files)
 
-    ### print ('---------------')
+    viirs_files_selected = []
 
     for f2 in viirs_files:
       ### print ('f2: ', f2)
       ff = nc4.Dataset(f2, 'r')
       v_starttime = datetime.strptime(ff.time_coverage_start, '%Y-%m-%dT%H:%M:%S.000Z')
       v_endtime = datetime.strptime(ff.time_coverage_end, '%Y-%m-%dT%H:%M:%S.000Z')
-      ### print ('v starttime: ', v_starttime)
-      ### print ('v endtime: ', v_endtime)
+      """
+      print ('v starttime: ', v_starttime)
+      print ('v endtime: ', v_endtime)
+      """
 
       if starttime <= v_endtime and endtime >= v_starttime:
-        """
-        print ('v starttime: ', v_starttime)
-        print ('v endtime: ', v_endtime)
-        """
-        shutil.copyfile(f2, os.path.join(dir1, os.path.basename(f2)))
+        print ('v starttime: ', v_starttime, ' , v endtime: ', v_endtime)
+        ### shutil.copyfile(f2, os.path.join(dir1, os.path.basename(f2)))
+        viirs_files_selected.append(f2)
+
+    print('viirs_files_selected: ', viirs_files_selected)
+
+    ### sys.exit(0)
 
     # spawn co-location child process
+    """
     cmd = '/home/leipan/anaconda3/bin/python /home/leipan/code_test_QY.py'
     p1 = subprocess.Popen(cmd, shell=True, cwd=dir1, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
     out, err = p1.communicate()
     print('out: ', out)
     print('err: ', err)
+    """
 
     # check to make sure that under dir1 there are 4 files
     """
@@ -161,16 +178,18 @@ if __name__ == '__main__':
     print('day1: ', day1)
     print(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS')
     cris_geo_files = sorted(glob.glob(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS*L1B.std*'+ext))
-    print ('cris_geo_files: ', cris_geo_files)
+    ### print ('cris_geo_files: ', cris_geo_files)
     print ('len(cris_geo_files): ', len(cris_geo_files))
 
-    sys.exit()
+    ### sys.exit()
 
     chunks = [cris_geo_files[x:x+chunk_size] for x in range(0, len(cris_geo_files), chunk_size)]
     for cris_files in chunks:
       processes = []
       for cris_file in cris_files:
-        p1 = Process(target=pair_one_cris, args=(cris_file, dataDir4, pair_dir_root, day1))
+        ### colocate_one_cris_granual(cris_file, args.vr+str(args.y)+'/', args.pr, day1)
+
+        p1 = Process(target=colocate_one_cris_granual, args=(cris_file, args.vr+str(args.y)+'/', args.pr, day1))
         processes.append(p1)
 
       for p in processes:
