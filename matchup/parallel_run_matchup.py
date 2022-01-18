@@ -72,6 +72,7 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
     ### print('viirs_files: ', viirs_files)
 
     viirs_files_selected = []
+    v_times = []
 
     for f2 in viirs_files:
       ### print ('f2: ', f2)
@@ -87,8 +88,29 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
         print ('v starttime: ', v_starttime, ' , v endtime: ', v_endtime)
         ### shutil.copyfile(f2, os.path.join(dir1, os.path.basename(f2)))
         viirs_files_selected.append(f2)
+        v_times.append(v_starttime)
+        v_times.append(v_endtime)
 
     print('viirs_files_selected: ', viirs_files_selected)
+
+    # write to manifest file
+    mfile_name = os.path.join(dir1, 'manifest.mf')
+    with open(mfile_name, 'w') as f:
+      f.write('CrIS granule:')
+      f.write(cris_files[0])
+      f.write('\nCrIS time duration:')
+      f.write(str(starttime))
+      f.write(',')
+      f.write(str(endtime))
+      f.write('\nVIIRS granules:')
+      for vf in viirs_files_selected:
+        f.write(vf)
+        f.write(',')
+      f.write('\nVIIRS time durations:')
+      for t1 in v_times:
+        f.write(str(t1))
+        f.write(',')
+      f.write('\n')
 
     ### sys.exit(0)
 
@@ -127,7 +149,7 @@ if __name__ == '__main__':
   parser.add_argument('--d2', metavar='END DAY', type=int, required=True, help='end day')
   parser.add_argument('--cr', metavar='CrIS Root Dir', type=str, const='/peate_archive/NPPOps/snpp/gdisc/2/', help='CrIS root dir', nargs='?')
   parser.add_argument('--vr', metavar='VIIRS Root Dir', type=str, const='/raid15/leipan/VIIRS/VNP03MOD/', help='VIIRS root dir', nargs='?')
-  parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/pair/20220116/', help='product root dir', nargs='?')
+  parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/20220117/', help='product root dir', nargs='?')
   parser.add_argument('--c', metavar='CPU COUNT', type=int, const=36, help='CPU count', nargs='?')
   args = parser.parse_args()
 
@@ -147,7 +169,7 @@ if __name__ == '__main__':
     chunk_size = args.c
 
   if args.pr == None:
-    args.pr = '/raid15/leipan/products/20210116/'
+    args.pr = '/raid15/leipan/products/20220117/'
   if args.cr == None:
     args.cr = '/peate_archive/NPPOps/snpp/gdisc/2/'
   if args.vr == None:
@@ -187,14 +209,18 @@ if __name__ == '__main__':
     for cris_files in chunks:
       processes = []
       for cris_file in cris_files:
-        ### colocate_one_cris_granual(cris_file, args.vr+str(args.y)+'/', args.pr, day1)
+        colocate_one_cris_granual(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1)
 
+        """
         p1 = Process(target=colocate_one_cris_granual, args=(cris_file, args.vr+str(args.y)+'/', args.pr, day1))
         processes.append(p1)
+        """
 
+      """
       for p in processes:
         p.start()
 
       for p in processes:
         p.join()
+      """
 
