@@ -13,6 +13,8 @@ import os
 import stat
 import argparse
 
+sys.path.append('/home/leipan/pge/CrIS_VIIRS_collocation-master/')
+from code_test_QY import call_match_cris_viirs
 
 ext = '.nc'
 
@@ -114,14 +116,8 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
 
     ### sys.exit(0)
 
-    # spawn co-location child process
-    """
-    cmd = '/home/leipan/anaconda3/bin/python /home/leipan/code_test_QY.py'
-    p1 = subprocess.Popen(cmd, shell=True, cwd=dir1, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-    out, err = p1.communicate()
-    print('out: ', out)
-    print('err: ', err)
-    """
+    # call colocation func
+    call_match_cris_viirs(cris_files, viirs_files_selected, dir1)
 
     # check to make sure that under dir1 there are 4 files
     """
@@ -195,6 +191,8 @@ if __name__ == '__main__':
 
   month1 = str(args.m).zfill(2)
 
+  PARALLEL = True
+
   for day in range (args.d1, args.d2+1):
     day1 = str(day).zfill(2)
     print('day1: ', day1)
@@ -209,18 +207,17 @@ if __name__ == '__main__':
     for cris_files in chunks:
       processes = []
       for cris_file in cris_files:
-        colocate_one_cris_granual(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1)
+        if PARALLEL is False:
+          colocate_one_cris_granual(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1)
+        else:
+          p1 = Process(target=colocate_one_cris_granual, args=(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1))
+          processes.append(p1)
 
-        """
-        p1 = Process(target=colocate_one_cris_granual, args=(cris_file, args.vr+str(args.y)+'/', args.pr, day1))
-        processes.append(p1)
-        """
+      if PARALLEL is True:
+        for p in processes:
+          p.start()
 
-      """
-      for p in processes:
-        p.start()
+        for p in processes:
+          p.join()
 
-      for p in processes:
-        p.join()
-      """
 
