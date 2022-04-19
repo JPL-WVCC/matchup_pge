@@ -5,6 +5,7 @@ import fnmatch
 import netCDF4 as nc4
 import datetime
 import shlex, subprocess
+import numpy as np
 
 ### root_dir = './test_output/'
 root_dir = './tmp/'
@@ -72,6 +73,8 @@ for root, dir, files in os.walk(root_dir):
       f.VIIRS_FILE1 = viirs_filenames[0]
       f.VIIRS_FILE2 = viirs_filenames[1]
       f.VIIRS_FILE3 = viirs_filenames[2]
+      nf = np.int32(3)
+      f.VIIRS_FILES_COUNT = nf
 
       # start/end times
       cris_startt = f.cris_start_time
