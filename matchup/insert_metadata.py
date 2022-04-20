@@ -62,7 +62,9 @@ for root, dir, files in os.walk(root_dir):
       # insert global attributes into nc file using info from manifest file
       f = nc4.Dataset(nc_fname, 'r+', format='NETCDF4')
 
-      f.VERSION = '1.0'
+      f.VERSION = '1'
+      f.SHORT_NAME = "SNPP_CrIS_VIIRS750m_IND"
+      f.TITLE = "SNPP CrIS-VIIRS 750-m Matchup Indexes V1"
       f.IDENTIFIER_PRODUCT_DOI_AUTHORITY = "http://dx.doi.org/"
       f.IDENTIFIER_PRODUCT_DOI = "10.5067/MEASURES/WVCC/DATA211"
 
