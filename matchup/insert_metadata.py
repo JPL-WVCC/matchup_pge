@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import os
+import os,sys
 import fnmatch
 import netCDF4 as nc4
 import datetime
@@ -8,7 +8,16 @@ import shlex, subprocess
 import numpy as np
 
 ### root_dir = './test_output/'
+"""
+root_dir = '/raid15/leipan/products/20220117/'
+year1 = '2015'
+root_dir += year1 + '/'
+"""
+
 root_dir = './tmp/'
+print ('------------- root_dir: ' + root_dir)
+### sys.exit()
+
 nc_fname = ''
 manifest_fname = ''
 
@@ -53,6 +62,7 @@ for root, dir, files in os.walk(root_dir):
 
       viirs_filenames = viirs_filenames.split(':')[1]
       viirs_filenames = viirs_filenames.split(',')
+      viirs_filenames.pop()  # remove the last element, which is '\n'
       for i, fn in enumerate(viirs_filenames):
         fn = os.path.basename(fn)
         viirs_filenames[i] = fn
@@ -72,10 +82,27 @@ for root, dir, files in os.walk(root_dir):
       f.PRODUCTIONDATE = ct.isoformat()
 
       f.CRIS_FILE = cris_filename
-      f.VIIRS_FILE1 = viirs_filenames[0]
-      f.VIIRS_FILE2 = viirs_filenames[1]
-      f.VIIRS_FILE3 = viirs_filenames[2]
-      nf = np.int32(3)
+
+      nf = 0
+      try:
+        f.VIIRS_FILE1 = viirs_filenames[0]
+        nf += 1
+      except IndexError:
+        pass
+
+      try:
+        f.VIIRS_FILE2 = viirs_filenames[1]
+        nf += 1
+      except IndexError:
+        pass
+
+      try:
+        f.VIIRS_FILE3 = viirs_filenames[2]
+        nf += 1
+      except IndexError:
+        pass
+
+      nf = np.int32(nf)
       f.VIIRS_FILES_COUNT = nf
 
       # start/end times
