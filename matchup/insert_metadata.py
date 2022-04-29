@@ -8,13 +8,12 @@ import shlex, subprocess
 import numpy as np
 
 ### root_dir = './test_output/'
-"""
 root_dir = '/raid15/leipan/products/20220117/'
-year1 = '2015'
+year1 = '2021'
 root_dir += year1 + '/'
-"""
 
-root_dir = './tmp/'
+### root_dir = './tmp/'
+
 print ('------------- root_dir: ' + root_dir)
 ### sys.exit()
 
