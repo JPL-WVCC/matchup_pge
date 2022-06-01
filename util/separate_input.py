@@ -69,7 +69,8 @@ def move_input_granules(src_input_dir_root, input_dir_root):
 if __name__ == '__main__':
 
   dir_root = '/raid8/leipan/pair/'
-  yearmon = '201710'
+  ### yearmon = '201710'
+  yearmon = '202008'
   product_dir_root = os.path.join(dir_root, 'product', yearmon)
   input_dir_root = os.path.join(dir_root, 'input', yearmon)
   if os.path.exists(product_dir_root) == False:
