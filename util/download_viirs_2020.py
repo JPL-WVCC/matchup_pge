@@ -19,9 +19,15 @@ if __name__ == "__main__":
 
   year = 2020
 
+  for day1 in range(1, 366):
+    day1_str = str(day1).zfill(3)
+    download_one_day(year, day1_str)
+
+  """
   processes = []
-  for day1 in range(213, 246):
-    p1 = Process(target=download_one_day, args=(year, day1))
+  for day1 in range(211, 300):
+    day1_str = str(day1).zfill(3)
+    p1 = Process(target=download_one_day, args=(year, day1_str))
     processes.append(p1)
 
   for p in processes:
@@ -29,3 +35,4 @@ if __name__ == "__main__":
 
   for p in processes:
     p.join()
+  """
