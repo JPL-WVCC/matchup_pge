@@ -7,15 +7,27 @@ import datetime
 import shlex, subprocess, shutil
 import numpy as np
 
+print ('Number of arguments:', len(sys.argv), 'arguments.')
+print ('Argument List:', str(sys.argv))
+
+try:
+  year1 = sys.argv[1]
+except IndexError:
+  print ('*** Error: you need to provide a year.')
+  sys.exit()
+
 ### root_dir = './test_output/'
 ### root_dir = '/raid15/leipan/products/20220504/'
 ### root_dir = '/raid15/leipan/products/20220117/'
-root_dir = 'tmp/'
-year1 = '2015'
-month1 = '11'
+### root_dir = 'tmp/'
+### root_dir = '/raid8/leipan/test/'
+root_dir = '/raid15/leipan/products/20220117/'
+### year1 = '2016'
+### month1 = '01'
 ### year1 = '2020'
 ### month1 = '08'
-root_dir += year1 + '/' + month1 + '/'
+### root_dir += year1 + '/' + month1 + '/'
+root_dir += year1 + '/'
 
 ### root_dir = './tmp/'
 
@@ -60,3 +72,6 @@ for root, dir, files in os.walk(root_dir):
       # h5repack -i IND_CrIS_VIIRSMOD_SNDR.SNPP.20171129T2106.g212.nc -o test.nc -f GZIP=5
       print ("-----------------------------------------")
       print ("")
+
+print (" all done: ", year1)
+
