@@ -82,9 +82,9 @@ def colocate_one_airs_granual(airs_file, modis_dir, output_dir_root, day1):
     ### print ('day_of_year: ', day_of_year)
     ### print ('day_of_year_plus1: ', day_of_year_plus1)
 
-    dir1 = modis_dir+str(year_minus1).zfill(4)+'/'+str(month_minus1).zfill(2)+'/'+str(day_minus1).zfill(2)+'/'+'aqua_modis_myd03/'
-    print('dir1: ', dir1)
-    modis_geo_files1 = sorted(glob.glob(dir1+'MYD03.*'+ext1))
+    dir11 = modis_dir+str(year_minus1).zfill(4)+'/'+str(month_minus1).zfill(2)+'/'+str(day_minus1).zfill(2)+'/'+'aqua_modis_myd03/'
+    print('dir11: ', dir11)
+    modis_geo_files1 = sorted(glob.glob(dir11+'MYD03.*'+ext1))
     ### print('modis_geo_files1: ', modis_geo_files1)
     print('len(modis_geo_files1): ', len(modis_geo_files1))
 
@@ -124,6 +124,26 @@ def colocate_one_airs_granual(airs_file, modis_dir, output_dir_root, day1):
           v_times.append(v_endtime)
 
     print('modis_files_selected: ', modis_files_selected)
+
+    # write to manifest file
+    mfile_name = os.path.join(dir1, 'manifest.mf')
+    with open(mfile_name, 'w') as f:
+      f.write('AIRS granule:')
+      f.write(airs_files[0])
+      f.write('\nAIRS time duration:')
+      f.write(str(starttime))
+      f.write(',')
+      f.write(str(endtime))
+      f.write('\nMODIS granules:')
+      for vf in modis_files_selected:
+        f.write(vf)
+        f.write(',')
+      f.write('\nMODIS time durations:')
+      for t1 in v_times:
+        f.write(str(t1))
+        f.write(',')
+      f.write('\n')
+
 
 
 
@@ -278,11 +298,10 @@ if __name__ == '__main__':
   print('CPU count: ', args.c)
 
   ### airs_file = 'AIRS.2016.01.21.111.L1B.AIRS_Rad.v5.0.23.0.G16022093745.hdf'
-  ### airs_file = 'AIRS.2019.09.09.216.L1B.AIRS_Rad.v5.0.23.0.G19253112146.hdf'
+  airs_file = 'AIRS.2019.09.09.216.L1B.AIRS_Rad.v5.0.23.0.G19253112146.hdf'
 
   ### MYD03.A2019252.1950.061.2019253151407.hdf'
-  ### airs_file = 'AIRS.2019.09.09.216.L1B.AIRS_Rad.v5.0.23.0.G19253112146.hdf'
-  airs_file = 'AIRS.2019.11.09.050.L1B.AIRS_Rad.v5.0.23.0.G19313102440.hdf'
+  ### airs_file = 'AIRS.2019.11.09.050.L1B.AIRS_Rad.v5.0.23.0.G19313102440.hdf'
 
   modis_dir = ''
   output_dir_root = ''
