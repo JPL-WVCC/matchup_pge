@@ -8,9 +8,10 @@ import shlex, subprocess
 import numpy as np
 
 ### root_dir = './test_output/'
-root_dir = '/raid15/leipan/products/20220117/'
-year1 = '2021'
-root_dir += year1 + '/'
+root_dir = '/raid15/leipan/products/20220504/'
+year1 = '2017'
+month1 = '08'
+root_dir += year1 + '/' + month1 + '/'
 
 ### root_dir = './tmp/'
 
