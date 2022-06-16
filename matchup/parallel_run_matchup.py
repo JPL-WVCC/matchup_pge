@@ -12,9 +12,27 @@ from datetime import datetime,timedelta
 import os
 import stat
 import argparse
+import logging
+import logging.config
 
 sys.path.append('/home/leipan/pge/CrIS_VIIRS_collocation-master/')
 from code_test_QY import call_match_cris_viirs
+
+logger = logging.getLogger("parallel_run_matchup")
+logger.setLevel(logging.INFO)
+
+handler = logging.FileHandler('cris_viirs_log.log')
+handler.setLevel(logging.INFO)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+ch.setFormatter(formatter)
+
+logger.addHandler(handler)
+logger.addHandler(ch)
 
 ext = '.nc'
 
@@ -56,11 +74,9 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
     day_of_year = starttime.timetuple().tm_yday 
     day_of_year_p1 = starttime_p1.timetuple().tm_yday 
 
-    """
     print ('day_of_year_m1: ', day_of_year_m1)
     print ('day_of_year: ', day_of_year)
     print ('day_of_year_p1: ', day_of_year_p1)
-    """
 
     viirs_geo_files1 = sorted(glob.glob(viirs_dir+str(day_of_year_m1).zfill(3)+'/'+'VNP03MOD.*'+ext))
     viirs_geo_files2 = sorted(glob.glob(viirs_dir+str(day_of_year).zfill(3)+'/'+'VNP03MOD.*'+ext))
@@ -81,10 +97,8 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
       ff = nc4.Dataset(f2, 'r')
       v_starttime = datetime.strptime(ff.time_coverage_start, '%Y-%m-%dT%H:%M:%S.000Z')
       v_endtime = datetime.strptime(ff.time_coverage_end, '%Y-%m-%dT%H:%M:%S.000Z')
-      """
-      print ('v starttime: ', v_starttime)
-      print ('v endtime: ', v_endtime)
-      """
+      ### print ('v starttime: ', v_starttime)
+      ### print ('v endtime: ', v_endtime)
 
       if starttime <= v_endtime and endtime >= v_starttime:
         print ('v starttime: ', v_starttime, ' , v endtime: ', v_endtime)
@@ -119,18 +133,22 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
     # call colocation func
     call_match_cris_viirs(cris_files, viirs_files_selected, dir1)
 
-    # check to make sure that under dir1 there are 4 files
-    """
-    cnt = len([name for name in os.listdir(dir1) if os.path.isfile(name)])
-    if cnt != 4:
-      print('Warning: there are {0} files under {1}, not 4 as expected!'.format(cnt, dir1))
+    # check to make sure that under dir1 there are the manifest and the index files
+    cnt = len([name for name in os.listdir(dir1) if os.path.isfile(os.path.join(dir1, name))])
+    if cnt != 1:
+      print('Warning: there are {0} files under {1}, not 1 as expected!'.format(cnt, dir1))
+      logger.info('Warning: there are {0} files under {1}, not 1 as expected!'.format(cnt, dir1))
 
-    for name in os.listdir(dir1):
-      if os.path.isdir(name):
-        cnt = len([name for name in os.listdir(os.path.join(dir1, name)) if os.path.isfile(name)])
+    for name2 in os.listdir(dir1):
+      if os.path.isdir(os.path.join(dir1, name2)):
+        list2 = [name for name in os.listdir(os.path.join(dir1, name2)) if os.path.isfile(os.path.join(dir1, name2, name))]
+        ### print('list2: ', list2)
+        cnt = len(list2)
         if cnt != 3:
-          print('Warning: there are {0} files under {1}, not 4 as expected!'.format(cnt, os.path.join(dir1, name)))
-    """
+          print('Warning: there are {0} files under {1}, not 3 as expected!'.format(cnt, os.path.join(dir1, name2)))
+          logger.info('Warning: there are {0} files under {1}, not 3 as expected!'.format(cnt, os.path.join(dir1, name2)))
+
+# end of colocate_one_cris_granual()
 
 
 
@@ -145,7 +163,7 @@ if __name__ == '__main__':
   parser.add_argument('--d2', metavar='END DAY', type=int, required=True, help='end day')
   parser.add_argument('--cr', metavar='CrIS Root Dir', type=str, const='/peate_archive/NPPOps/snpp/gdisc/2/', help='CrIS root dir', nargs='?')
   parser.add_argument('--vr', metavar='VIIRS Root Dir', type=str, const='/raid15/leipan/VIIRS/VNP03MOD/', help='VIIRS root dir', nargs='?')
-  parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/20220117/', help='product root dir', nargs='?')
+  parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/debug/', help='product root dir', nargs='?')
   parser.add_argument('--c', metavar='CPU COUNT', type=int, const=36, help='CPU count', nargs='?')
   args = parser.parse_args()
 
@@ -158,6 +176,16 @@ if __name__ == '__main__':
   print('product root dir: ', args.pr)
   print('CPU count: ', args.c)
 
+  # testing logging
+  """
+  logger.info('test logging ...')
+  cris_files = []
+  viirs_files_selected = []
+  dir1 = ''
+  call_match_cris_viirs(cris_files, viirs_files_selected, dir1)
+  logger.info('Warning: there are {0} files under {1}, not 1 as expected!'.format(0, '/tmp/dir/'))
+  sys.exit()
+  """
 
   # how many total cores to use for parallel processing
   chunk_size = multiprocessing.cpu_count()
@@ -165,7 +193,8 @@ if __name__ == '__main__':
     chunk_size = args.c
 
   if args.pr == None:
-    args.pr = '/raid15/leipan/products/20220117/'
+    ### args.pr = '/raid15/leipan/products/20220117/'
+    args.pr = '/raid15/leipan/products/debug/'
   if args.cr == None:
     args.cr = '/peate_archive/NPPOps/snpp/gdisc/2/'
   if args.vr == None:
@@ -186,8 +215,6 @@ if __name__ == '__main__':
   print ('cris_geo_files: ', cris_geo_files)
   print ('len(cris_geo_files): ', len(cris_geo_files))
   """
-
-  print("done in --- %.2f seconds --- " % (float(time.time() - start_time)))
 
   month1 = str(args.m).zfill(2)
 
@@ -220,4 +247,5 @@ if __name__ == '__main__':
         for p in processes:
           p.join()
 
+  print("done in --- %.2f seconds --- " % (float(time.time() - start_time)))
 
