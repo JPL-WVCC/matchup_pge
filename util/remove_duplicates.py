@@ -11,6 +11,8 @@ if __name__ == '__main__':
 
   dict1 = {}
 
+  total_nc = 0
+
   for (dirpath, dirnames, filenames) in os.walk(src_dir):
     """
     print ('------- dirpath: ', dirpath)
@@ -20,29 +22,37 @@ if __name__ == '__main__':
 
     for filename in filenames:
       if filename.endswith('.nc'):
-        print ('------- dirpath: ', dirpath)
+        total_nc += 1
+        ### print ('------- dirpath: ', dirpath)
         file1.write(f'------- dirpath: {dirpath}\n')
         dirpath_basename = os.path.basename(dirpath)
         upper_dir = dirpath.replace(dirpath_basename, '')
         upper_dir = upper_dir[:-1]
         upper_dir_basename = os.path.basename(upper_dir)
-        print(f'         {upper_dir_basename}')
+        ### print(f'         {upper_dir_basename}')
         file1.write(f'         {upper_dir_basename}\n')
 
         if filename in dict1.keys():
           dict1[filename].append(upper_dir_basename)
-          print('filename: ', dict1[filename])
+          ### print('filename: ', dict1[filename])
         else:
           dict1[filename] = [upper_dir_basename]
 
-  file1.close()
+  file1.write(f'\n\n------- total_nc count: {total_nc}\n')
 
   print('len(dict1): ', len(dict1))
 
+  duplicated_cnt = 0
+
   for key in dict1:
     if len(dict1[key]) > 1:
+      duplicated_cnt += 1
       values = ' '.join(str(e) for e in dict1[key])
-      print('key: {0}, value: {1}'.format(key,  values))
+      ### print('key: {0}, value: {1}'.format(key,  values))
       file2.write('key: {0}, value: {1}\n'.format(key,  values))
 
   file2.close()
+
+  file1.write(f'------- duplicated_cnt: {duplicated_cnt}\n')
+  file1.write(f'------- unique count: {len(dict1)}\n')
+  file1.close()
