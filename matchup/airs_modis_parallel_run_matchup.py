@@ -16,13 +16,14 @@ import argparse
 sys.path.append('/home/leipan/pge/CrIS_VIIRS_collocation-master/')
 sys.path.append('/home/leipan/pge/AIRS_MODIS_collocation-master/')
 from code_test_QY import call_match_cris_viirs
+from geo_airs_modis_ncloud import call_match_airs_modis
 from geo import read_airs_time, read_modis_time
 
 ext = '.nc'
 ext1 = '.hdf'
 
 # --------------------------------------
-def colocate_one_airs_granual(airs_file, modis_dir, output_dir_root, day1):
+def colocate_one_airs_granual(airs_file, modis_dir, output_dir_root):
   
   print (' --------- modis_dir: ', modis_dir)
   
@@ -31,11 +32,17 @@ def colocate_one_airs_granual(airs_file, modis_dir, output_dir_root, day1):
     airs_files.append(airs_file)
     print('airs_files: ', airs_files)
     
+    # example: AIRS.2016.01.30.240.L1B.AIRS_Rad.v5.0.23.0.G16031113544.hdf
     f1 = airs_file
     ### print ('f1: ', f1)
     basename1 = os.path.splitext(os.path.basename(f1))[0]
-    dir1 = os.path.join(output_dir_root, day1, basename1)
-    ### print ('dir1: ', dir1)
+    basename1_split = basename1.split('.')
+    year1 = basename1_split[1]
+    month1 = basename1_split[2]
+    day1 = basename1_split[3]
+
+    dir1 = os.path.join(output_dir_root, str(year1), str(month1), str(day1), basename1)
+    print ('dir1: (if exists delete it)', dir1)
 
     if os.path.exists(dir1):
       shutil.rmtree(dir1)
@@ -59,10 +66,6 @@ def colocate_one_airs_granual(airs_file, modis_dir, output_dir_root, day1):
     starttime_minus1 = starttime - delta1
     starttime_plus1 = starttime + delta1
     ### day_of_year_minus1 = starttime_minus1.timetuple().tm_yday 
-
-    year1 = starttime.year
-    month1 = starttime.month
-    day1 = starttime.day
 
     year_minus1 = starttime_minus1.year
     month_minus1 = starttime_minus1.month
@@ -143,6 +146,24 @@ def colocate_one_airs_granual(airs_file, modis_dir, output_dir_root, day1):
         f.write(str(t1))
         f.write(',')
       f.write('\n')
+
+    ### sys.exit(0)
+
+    # call colocation func
+    call_match_airs_modis(airs_files, modis_files_selected, day1, 1, dir1)
+
+    # check to make sure that under dir1 there are 4 files
+    """
+    cnt = len([name for name in os.listdir(dir1) if os.path.isfile(name)])
+    if cnt != 4:
+      print('Warning: there are {0} files under {1}, not 4 as expected!'.format(cnt, dir1))
+
+    for name in os.listdir(dir1):
+      if os.path.isdir(name):
+        cnt = len([name for name in os.listdir(os.path.join(dir1, name)) if os.path.isfile(name)])
+        if cnt != 3:
+          print('Warning: there are {0} files under {1}, not 4 as expected!'.format(cnt, os.path.join(dir1, name)))
+    """
 
 
 
@@ -281,36 +302,36 @@ if __name__ == '__main__':
   parser.add_argument('--cr', metavar='CrIS Root Dir', type=str, const='/peate_archive/NPPOps/snpp/gdisc/2/', help='CrIS root dir', nargs='?')
   parser.add_argument('--vr', metavar='VIIRS Root Dir', type=str, const='/raid15/leipan/VIIRS/VNP03MOD/', help='VIIRS root dir', nargs='?')
   ### parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/20220117/', help='product root dir', nargs='?')
-  parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/20220504/', help='product root dir', nargs='?')
+  parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/dev/', help='product root dir', nargs='?')
   parser.add_argument('--c', metavar='CPU COUNT', type=int, const=36, help='CPU count', nargs='?')
   parser.add_argument('--ar', metavar='AIRS Root Dir', type=str, const='/archive/AIRSOps/airs/gdaac/v5/', help='AIRS root dir', nargs='?')
   parser.add_argument('--mr', metavar='MODIS Root Dir', type=str, const='/peate_archive/NPPOps/aqua_modis/laads/061/', help='MODIS root dir', nargs='?')
 
   args = parser.parse_args()
 
-  print('year: ', args.y)
-  print('month: ', args.m)
-  print('start day: ', args.d1)
-  print('end day: ', args.d2)
-  print('CrIS root dir: ', args.cr)
-  print('VIIRS root dir: ', args.vr)
-  print('product root dir: ', args.pr)
-  print('CPU count: ', args.c)
-
-  ### airs_file = 'AIRS.2016.01.21.111.L1B.AIRS_Rad.v5.0.23.0.G16022093745.hdf'
-  airs_file = 'AIRS.2019.09.09.216.L1B.AIRS_Rad.v5.0.23.0.G19253112146.hdf'
+  airs_file = 'AIRS.2016.01.21.111.L1B.AIRS_Rad.v5.0.23.0.G16022093745.hdf'
+  ### airs_file = 'AIRS.2019.09.09.216.L1B.AIRS_Rad.v5.0.23.0.G19253112146.hdf'
+  ### airs_file = 'AIRS.2019.09.23.229.L1B.AIRS_Rad.v5.0.23.0.G19267111452.hdf'
+  ### airs_file = 'AIRS.2018.09.16.050.L1B.AIRS_Rad.v5.0.23.0.G18259112808.hdf'
 
   ### MYD03.A2019252.1950.061.2019253151407.hdf'
   ### airs_file = 'AIRS.2019.11.09.050.L1B.AIRS_Rad.v5.0.23.0.G19313102440.hdf'
 
-  modis_dir = ''
-  output_dir_root = ''
-  day1 = ''
+  modis_dir = args.mr
+  output_dir_root = args.pr
+  day1 = args.d1
 
   if args.mr == None:
-    args.m = '/peate_archive/NPPOps/aqua_modis/laads/061/'
+    args.mr = '/peate_archive/NPPOps/aqua_modis/laads/061/'
 
-  colocate_one_airs_granual(airs_file, args.mr, output_dir_root, day1)
+  print('airs_file: ', airs_file)
+  print('args.mr: ', args.mr)
+  print('output_dir_root: ', output_dir_root)
+  print('day1: ', day1)
+
+  ### sys.exit(0)
+
+  colocate_one_airs_granual(airs_file, args.mr, output_dir_root)
 
   sys.exit(0)
 
@@ -321,7 +342,7 @@ if __name__ == '__main__':
     chunk_size = args.c
 
   if args.pr == None:
-    args.pr = '/raid15/leipan/products/20220117/'
+    args.pr = '/raid15/leipan/products/dev/'
   if args.cr == None:
     args.cr = '/peate_archive/NPPOps/snpp/gdisc/2/'
   if args.vr == None:
@@ -330,20 +351,14 @@ if __name__ == '__main__':
   print('CrIS root dir: ', args.cr)
   print('VIIRS root dir: ', args.vr)
   print('product root dir: ', args.pr)
+  print('year: ', args.y)
+  print('month: ', args.m)
+  print('start day: ', args.d1)
+  print('end day: ', args.d2)
+  print('CPU count: ', args.c)
 
   if os.path.exists(args.pr) == False:
     os.makedirs(args.pr)
-
-  ### viirs_geo_files = sorted(glob.glob(dataDir4+'VNP03MOD.*'+ext))
-  ### print ('viirs_geo_files: ', viirs_geo_files)
- 
-  """
-  cris_geo_files = sorted(glob.glob(args.cr+str(args.y)+'/**/**/crisl1b/SNDR.SNPP.CRIS*L1B.std*'+ext))
-  print ('cris_geo_files: ', cris_geo_files)
-  print ('len(cris_geo_files): ', len(cris_geo_files))
-  """
-
-  print("done in --- %.2f seconds --- " % (float(time.time() - start_time)))
 
   month1 = str(args.m).zfill(2)
 
@@ -352,7 +367,7 @@ if __name__ == '__main__':
   for day in range (args.d1, args.d2+1):
     day1 = str(day).zfill(2)
     print('day1: ', day1)
-    print(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS')
+    print(args.ar+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS')
     cris_geo_files = sorted(glob.glob(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS*L1B.std*'+ext))
     ### print ('cris_geo_files: ', cris_geo_files)
     print ('len(cris_geo_files): ', len(cris_geo_files))
@@ -375,5 +390,7 @@ if __name__ == '__main__':
 
         for p in processes:
           p.join()
+
+  print("done in --- %.2f seconds --- " % (float(time.time() - start_time)))
 
 
