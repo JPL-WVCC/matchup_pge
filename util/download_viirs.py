@@ -11,8 +11,10 @@ def download_one_day(year, day):
 
   p1 = subprocess.Popen(cmd, shell=True, cwd=work_dir, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
   out, err = p1.communicate()
-  print('out: ', out)
+  ### print('out: ', out)
   print('err: ', err)
+  rc = p1.returncode
+  print('return code: ', rc)
 
 
 if __name__ == "__main__":
