@@ -137,7 +137,7 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
     cnt = len([name for name in os.listdir(dir1) if os.path.isfile(os.path.join(dir1, name))])
     if cnt != 1:
       print('Warning: there are {0} files under {1}, not 1 as expected!'.format(cnt, dir1))
-      logger.info('Warning: there are {0} files under {1}, not 1 as expected!'.format(cnt, dir1))
+      logger.info('NO manifest Warning: there are {0} files under {1}, not 1 as expected!'.format(cnt, dir1))
 
     for name2 in os.listdir(dir1):
       if os.path.isdir(os.path.join(dir1, name2)):
@@ -146,7 +146,7 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
         cnt = len(list2)
         if cnt != 3:
           print('Warning: there are {0} files under {1}, not 3 as expected!'.format(cnt, os.path.join(dir1, name2)))
-          logger.info('Warning: there are {0} files under {1}, not 3 as expected!'.format(cnt, os.path.join(dir1, name2)))
+          logger.info('NO PRODUCT Warning: there are {0} files under {1}, not 3 as expected!'.format(cnt, os.path.join(dir1, name2)))
 
 # end of colocate_one_cris_granual()
 
@@ -163,7 +163,7 @@ if __name__ == '__main__':
   parser.add_argument('--d2', metavar='END DAY', type=int, required=True, help='end day')
   parser.add_argument('--cr', metavar='CrIS Root Dir', type=str, const='/peate_archive/NPPOps/snpp/gdisc/2/', help='CrIS root dir', nargs='?')
   parser.add_argument('--vr', metavar='VIIRS Root Dir', type=str, const='/raid15/leipan/VIIRS/VNP03MOD/', help='VIIRS root dir', nargs='?')
-  parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/debug/', help='product root dir', nargs='?')
+  parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/20220616/', help='product root dir', nargs='?')
   parser.add_argument('--c', metavar='CPU COUNT', type=int, const=36, help='CPU count', nargs='?')
   args = parser.parse_args()
 
@@ -194,7 +194,7 @@ if __name__ == '__main__':
 
   if args.pr == None:
     ### args.pr = '/raid15/leipan/products/20220117/'
-    args.pr = '/raid15/leipan/products/debug/'
+    args.pr = '/raid15/leipan/products/20220616/'
   if args.cr == None:
     args.cr = '/peate_archive/NPPOps/snpp/gdisc/2/'
   if args.vr == None:
