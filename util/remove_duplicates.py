@@ -3,7 +3,10 @@ import shutil
 
 if __name__ == '__main__':
 
+  ### src_dir = '/raid8/leipan/final_product/20220616/2021/'
   src_dir = '/raid8/leipan/final_product/20220616/2021/'
+  ### src_dir = '/raid8/leipan/final_product/test/2021/07/08/'
+  ### src_dir = '/raid8/leipan/final_product/test/2021/01/22/'
   ### src_dir = '/raid8/leipan/final_product/20220616/2021/01/'
   ### src_dir = '/raid15/leipan/products/20220616/'
 
@@ -46,6 +49,22 @@ if __name__ == '__main__':
 
   print('len(dict1): ', len(dict1))
 
+  # remove subdirs with no .nc files
+  for (dirpath, dirnames, filenames) in os.walk(src_dir):
+    if 'm06' in dirpath and 'IND_' not in dirpath:
+      ### print('dirpath: ', dirpath)
+
+      nc_file = False
+      for (d1, dn1, f1) in os.walk(dirpath):
+        ### print('f1: ', f1)
+        for ff in f1:
+          if ff.endswith('.nc'):
+            nc_file = True
+
+      if nc_file is False:
+        print(f'shutil.rmtree("{dirpath}")')
+        shutil.rmtree(dirpath)
+
   duplicated_cnt = 0
 
   # remove the duplicated products
@@ -57,9 +76,22 @@ if __name__ == '__main__':
       file2.write('key: {0}, value: {1}\n'.format(key,  values))
 
       # remove the first subdir altogether
+      """
       ### print(f'removing {dict1[key][0]}')
       print(f'shutil.rmtree("{dict1[key][0]}")')
       shutil.rmtree(dict1[key][0])
+      """
+
+      # remove the subdir with less amount of data
+      sum0 = sum(os.path.getsize(f) for f in os.listdir(dict1[key][0]) if os.path.isfile(f))
+      sum1 = sum(os.path.getsize(f) for f in os.listdir(dict1[key][1]) if os.path.isfile(f))
+
+      if sum0 <= sum1:
+        print(f'shutil.rmtree("{dict1[key][0]}") --- the 1st one')
+        shutil.rmtree(dict1[key][0])
+      else:
+        print(f'shutil.rmtree("{dict1[key][1]}") --- the 2nd one')
+        shutil.rmtree(dict1[key][1])
 
   # rename subdir names
   for (dirpath, dirnames, filenames) in os.walk(src_dir):
@@ -70,7 +102,6 @@ if __name__ == '__main__':
       ### print(f'renaming {dirpath} to {dirpath1}')
       print(f'os.rename("{dirpath}", "{dirpath1}")')
       os.rename(dirpath, dirpath1)
-
 
   file2.close()
 
