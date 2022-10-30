@@ -42,9 +42,9 @@ if __name__ == '__main__':
     # airs_geo_files = sorted(glob.glob(args.ar+str(args.y)+'/'+month1+'/'+day1+'/'+'airibrad/AIRS.*L1B.AIRS*.*'+ext1))
     # '/archive/AIRSOps/airs/gdaac/v5/2004/10/13/airibrad/AIRS.2004.10.13.226.L1B.AIRS_Rad.v5.0.0.0.G07103093218.hdf'
 
-    dir1 = '/raid15/leipan/test/2002/09/06/AIRS.2002.09.06.160/IND_AIRS_MODIS1km.2002.09.06.160.nc'
+    ### dir1 = '/raid15/leipan/test/2002/09/06/AIRS.2002.09.06.160/IND_AIRS_MODIS1km.2002.09.06.160.nc'
 
-    dst_dir = '/raid15/leipan/products/20221025/'
+    dst_dir = '/raid15/leipan/products/20221029/'
     print('dst_dir: ', dst_dir)
     src_dir = '/raid15/leipan/products/20220923/'
     input_file = 'Aqua_AIRS_MODIS1km_IND.1.failed.txt'
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
         subdir_name = 'AIRS.'+yy+'.'+mm+'.'+dd+'.'+num
         dir1 = src_dir+yy+'/'+mm+'/'+dd+'/'+subdir_name+'/'
-        print('dir1: ', dir1)
+        ### print('dir1: ', dir1)
 
         # copy to dst_dir
         ### shutil.copytree(dir1, dst_dir+subdir_name)
