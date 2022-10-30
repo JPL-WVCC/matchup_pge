@@ -12,12 +12,16 @@ from datetime import datetime,timedelta
 import os
 import stat
 import argparse
+import logging
 
 sys.path.append('/home/leipan/pge/CrIS_VIIRS_collocation-master/')
 sys.path.append('/home/leipan/pge/AIRS_MODIS_collocation-master/')
 from code_test_QY import call_match_cris_viirs
 from geo_airs_modis_ncloud import call_match_airs_modis
 from geo import read_airs_time, read_modis_time
+
+
+module_logger = logging.getLogger("airs_modis_parallel_run_matchup.airs_modis_parallel_run_matchup")
 
 ext = '.nc'
 ext1 = '.hdf'
@@ -41,12 +45,20 @@ def colocate_one_airs_granual(airs_file, modis_dir, output_dir_root):
     month1 = basename1_split[2]
     day1 = basename1_split[3]
 
-    dir1 = os.path.join(output_dir_root, str(year1), str(month1), str(day1), basename1)
-    print ('dir1: (if exists delete it)', dir1)
+    pos1 = basename1.find('.L1B')
+    subdir1 = basename1[:pos1]
+    print('subdir1: ', subdir1)
 
+    ### dir1 = os.path.join(output_dir_root, str(year1), str(month1), str(day1), basename1)
+    dir1 = os.path.join(output_dir_root, str(year1), str(month1), str(day1), subdir1)
+    ### print ('dir1: (if exists delete it)', dir1)
+    print ('dir1: (if exists skip it)', dir1)
+
+    """
     if os.path.exists(dir1):
       shutil.rmtree(dir1)
     os.makedirs(dir1)
+    """
 
     # open f1 the AIRS hdf file and get start/end time
     time1 = read_airs_time(airs_files)
@@ -128,42 +140,44 @@ def colocate_one_airs_granual(airs_file, modis_dir, output_dir_root):
 
     print('modis_files_selected: ', modis_files_selected)
 
-    # write to manifest file
-    mfile_name = os.path.join(dir1, 'manifest.mf')
-    with open(mfile_name, 'w') as f:
-      f.write('AIRS granule:')
-      f.write(airs_files[0])
-      f.write('\nAIRS time duration:')
-      f.write(str(starttime))
-      f.write(',')
-      f.write(str(endtime))
-      f.write('\nMODIS granules:')
-      for vf in modis_files_selected:
-        f.write(vf)
+    if len(modis_files_selected) > 0:
+
+      # if exists, assume the product is good, either from a previous run (that is, this is a restart run),
+      # or from a redundent AIRS granule, such as
+      # /archive/AIRSOps/airs/gdaac/v5/2020/08/01/airibrad/AIRS.2020.08.01.189.L1B.AIRS_Rad.v5.0.23.0.G20215141841.hdf
+      # /archive/AIRSOps/airs/gdaac/v5/2020/08/01/airibrad/AIRS.2020.08.01.007.L1B.AIRS_Rad.v5.0.25.0.G20307183952.hdf
+      if os.path.exists(dir1):
+        print('****** INFO: product already produced from previous run: ', dir1)
+        return
+      else:
+        try:
+          os.makedirs(dir1)
+        except FileExistsError: # dir1 could be made by another parallel process
+          return
+
+      # write to manifest file
+      mfile_name = os.path.join(dir1, 'manifest.mf')
+      with open(mfile_name, 'w') as f:
+        f.write('AIRS granule:')
+        f.write(airs_files[0])
+        f.write('\nAIRS time duration:')
+        f.write(str(starttime))
         f.write(',')
-      f.write('\nMODIS time durations:')
-      for t1 in v_times:
-        f.write(str(t1))
-        f.write(',')
-      f.write('\n')
+        f.write(str(endtime))
+        f.write('\nMODIS granules:')
+        for vf in modis_files_selected:
+          f.write(vf)
+          f.write(',')
+        f.write('\nMODIS time durations:')
+        for t1 in v_times:
+          f.write(str(t1))
+          f.write(',')
+        f.write('\n')
 
-    ### sys.exit(0)
+      ### sys.exit(0)
 
-    # call colocation func
-    call_match_airs_modis(airs_files, modis_files_selected, day1, 1, dir1)
-
-    # check to make sure that under dir1 there are 4 files
-    """
-    cnt = len([name for name in os.listdir(dir1) if os.path.isfile(name)])
-    if cnt != 4:
-      print('Warning: there are {0} files under {1}, not 4 as expected!'.format(cnt, dir1))
-
-    for name in os.listdir(dir1):
-      if os.path.isdir(name):
-        cnt = len([name for name in os.listdir(os.path.join(dir1, name)) if os.path.isfile(name)])
-        if cnt != 3:
-          print('Warning: there are {0} files under {1}, not 4 as expected!'.format(cnt, os.path.join(dir1, name)))
-    """
+      # call colocation func
+      call_match_airs_modis(airs_files, modis_files_selected, day1, 1, dir1)
 
 
 
@@ -299,8 +313,6 @@ if __name__ == '__main__':
   parser.add_argument('--m', metavar='MONTH', type=int, required=True, help='month')
   parser.add_argument('--d1', metavar='START DAY', type=int, required=True, help='start day')
   parser.add_argument('--d2', metavar='END DAY', type=int, required=True, help='end day')
-  parser.add_argument('--cr', metavar='CrIS Root Dir', type=str, const='/peate_archive/NPPOps/snpp/gdisc/2/', help='CrIS root dir', nargs='?')
-  parser.add_argument('--vr', metavar='VIIRS Root Dir', type=str, const='/raid15/leipan/VIIRS/VNP03MOD/', help='VIIRS root dir', nargs='?')
   ### parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/20220117/', help='product root dir', nargs='?')
   parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/dev/', help='product root dir', nargs='?')
   parser.add_argument('--c', metavar='CPU COUNT', type=int, const=36, help='CPU count', nargs='?')
@@ -309,7 +321,10 @@ if __name__ == '__main__':
 
   args = parser.parse_args()
 
-  airs_file = 'AIRS.2016.01.21.111.L1B.AIRS_Rad.v5.0.23.0.G16022093745.hdf'
+  # /archive/AIRSOps/airs/gdaac/v5/2016/01/21/airibrad/AIRS.2016.01.21.111.L1B.AIRS_Rad.v5.0.23.0.G16022093745.hdf
+  ### airs_file = 'AIRS.2016.01.21.111.L1B.AIRS_Rad.v5.0.23.0.G16022093745.hdf'
+  # /archive/AIRSOps/airs/gdaac/v5/2017/10/21/airibrad/AIRS.2017.10.21.192.L1B.AIRS_Rad.v5.0.23.0.G17295112219.hdf
+  airs_file = '/archive/AIRSOps/airs/gdaac/v5/2017/10/21/airibrad/AIRS.2017.10.21.192.L1B.AIRS_Rad.v5.0.23.0.G17295112219.hdf'
   ### airs_file = 'AIRS.2019.09.09.216.L1B.AIRS_Rad.v5.0.23.0.G19253112146.hdf'
   ### airs_file = 'AIRS.2019.09.23.229.L1B.AIRS_Rad.v5.0.23.0.G19267111452.hdf'
   ### airs_file = 'AIRS.2018.09.16.050.L1B.AIRS_Rad.v5.0.23.0.G18259112808.hdf'
@@ -329,12 +344,10 @@ if __name__ == '__main__':
   print('output_dir_root: ', output_dir_root)
   print('day1: ', day1)
 
-  ### sys.exit(0)
-
+  """
   colocate_one_airs_granual(airs_file, args.mr, output_dir_root)
-
   sys.exit(0)
-
+  """
 
   # how many total cores to use for parallel processing
   chunk_size = multiprocessing.cpu_count()
@@ -343,13 +356,13 @@ if __name__ == '__main__':
 
   if args.pr == None:
     args.pr = '/raid15/leipan/products/dev/'
-  if args.cr == None:
-    args.cr = '/peate_archive/NPPOps/snpp/gdisc/2/'
-  if args.vr == None:
-    args.vr = '/raid15/leipan/VIIRS/VNP03MOD/'
+  if args.ar == None:
+    args.ar = '/archive/AIRSOps/airs/gdaac/v5/'
+  if args.mr == None:
+    args.mr = '/peate_archive/NPPOps/aqua_modis/laads/061/'
 
-  print('CrIS root dir: ', args.cr)
-  print('VIIRS root dir: ', args.vr)
+  print('AIRS root dir: ', args.ar)
+  print('MODIS root dir: ', args.mr)
   print('product root dir: ', args.pr)
   print('year: ', args.y)
   print('month: ', args.m)
@@ -363,25 +376,33 @@ if __name__ == '__main__':
   month1 = str(args.m).zfill(2)
 
   PARALLEL = True
+  ### PARALLEL = False
 
   for day in range (args.d1, args.d2+1):
     day1 = str(day).zfill(2)
     print('day1: ', day1)
-    print(args.ar+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS')
-    cris_geo_files = sorted(glob.glob(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS*L1B.std*'+ext))
-    ### print ('cris_geo_files: ', cris_geo_files)
-    print ('len(cris_geo_files): ', len(cris_geo_files))
+    print(args.ar+str(args.y)+'/'+month1+'/'+day1+'/'+'airibrad/')
+
+    ### airs_geo_files = sorted(glob.glob(args.ar+str(args.y)+'/'+month1+'/'+day1+'/'+'airibrad/AIRS.*L1B.AIRS*.23.*'+ext1)) # for 2020, 2017
+    ### airs_geo_files = sorted(glob.glob(args.ar+str(args.y)+'/'+month1+'/'+day1+'/'+'airibrad/AIRS.*L1B.AIRS*.22.*'+ext1)) # for 2015/01
+
+    airs_geo_files = sorted(glob.glob(args.ar+str(args.y)+'/'+month1+'/'+day1+'/'+'airibrad/AIRS.*L1B.AIRS*.*'+ext1)) # for 2020/08/01
+
+    ### print ('airs_geo_files: ', airs_geo_files)
+    print ('len(airs_geo_files): ', len(airs_geo_files))
 
     ### sys.exit()
 
-    chunks = [cris_geo_files[x:x+chunk_size] for x in range(0, len(cris_geo_files), chunk_size)]
-    for cris_files in chunks:
+    chunks = [airs_geo_files[x:x+chunk_size] for x in range(0, len(airs_geo_files), chunk_size)]
+    for airs_files in chunks:
       processes = []
-      for cris_file in cris_files:
+      for airs_file in airs_files:
         if PARALLEL is False:
-          colocate_one_cris_granual(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1)
+          ### colocate_one_cris_granual(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1)
+          colocate_one_airs_granual(airs_file, args.mr, output_dir_root)
         else:
-          p1 = Process(target=colocate_one_cris_granual, args=(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1))
+          ### p1 = Process(target=colocate_one_cris_granual, args=(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1))
+          p1 = Process(target=colocate_one_airs_granual, args=(airs_file, args.mr, output_dir_root))
           processes.append(p1)
 
       if PARALLEL is True:
