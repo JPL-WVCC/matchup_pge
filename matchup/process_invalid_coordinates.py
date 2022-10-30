@@ -1,6 +1,9 @@
+from multiprocessing import Process
+import multiprocessing
+import subprocess
 import netCDF4 as nc4
 import shutil
-import os
+import os,sys
 import glob
 from datetime import datetime, timedelta
 import logging
@@ -42,9 +45,7 @@ if __name__ == '__main__':
     # airs_geo_files = sorted(glob.glob(args.ar+str(args.y)+'/'+month1+'/'+day1+'/'+'airibrad/AIRS.*L1B.AIRS*.*'+ext1))
     # '/archive/AIRSOps/airs/gdaac/v5/2004/10/13/airibrad/AIRS.2004.10.13.226.L1B.AIRS_Rad.v5.0.0.0.G07103093218.hdf'
 
-    ### dir1 = '/raid15/leipan/test/2002/09/06/AIRS.2002.09.06.160/IND_AIRS_MODIS1km.2002.09.06.160.nc'
-
-    dst_dir = '/raid15/leipan/products/20221029/'
+    dst_dir = '/raid15/leipan/products/20221030/'
     print('dst_dir: ', dst_dir)
     src_dir = '/raid15/leipan/products/20220923/'
     input_file = 'Aqua_AIRS_MODIS1km_IND.1.failed.txt'
@@ -55,12 +56,29 @@ if __name__ == '__main__':
     with open(input_file) as f:
       lines = f.readlines()
 
+    cores_used = int(multiprocessing.cpu_count()/5)
+
+    chunk_size = int(len(lines)/cores_used)
+    if chunk_size == 0:
+      chunk_size = 1
+    print('chunk_size: ', chunk_size)
+
+    chunks = [lines[x:x+chunk_size] for x in range(0, len(lines), chunk_size)]
+    print('len(chunks): ', len(chunks))
+
+    for ck in chunks:
+      print('len(ck): ', len(ck))
+
+    for lines in chunks:
       # IND_AIRS_MODIS1km.2022.03.21.128.nc
       # /raid15/leipan/products/20220923/2022/03/21/AIRS.2022.03.21.128
+
+      processes = []
 
       for line in lines:
         line = line.replace('\n', '')
         print('line: ', line)
+
         split1 = line.split('_')
         str1 = split1[2]
         ### print('str1: ', str1)
@@ -71,16 +89,20 @@ if __name__ == '__main__':
         num = str2[4]
 
         subdir_name = 'AIRS.'+yy+'.'+mm+'.'+dd+'.'+num
-        dir1 = src_dir+yy+'/'+mm+'/'+dd+'/'+subdir_name+'/'
-        ### print('dir1: ', dir1)
-
-        # copy to dst_dir
-        ### shutil.copytree(dir1, dst_dir+subdir_name)
 
         airs_geo_file = glob.glob(ar+str(yy)+'/'+mm+'/'+dd+'/'+'airibrad/AIRS.'+yy+'.'+mm+'.'+dd+'.'+num+'.L1B.AIRS*.*'+ext1)
-        print('airs_geo_file: ', airs_geo_file)
-        print('')
+        ### print('airs_geo_file[0]: ', airs_geo_file[0])
+        ### print('')
 
-        colocate_one_airs_granual(airs_geo_file[0], mr, dst_dir)
+        ### colocate_one_airs_granual(airs_geo_file[0], mr, dst_dir)
+
+        p1 = Process(target=colocate_one_airs_granual, args=(airs_geo_file[0], mr, dst_dir))
+        processes.append(p1)
+
+      for p in processes:
+        p.start()
+          
+    for p in processes:
+      p.join()
 
 
