@@ -37,7 +37,7 @@ logger.addHandler(ch)
 ext = '.nc'
 
 # --------------------------------------
-def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
+def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1, spacecraft):
 
   print (' --------- viirs_dir: ', viirs_dir)
 
@@ -51,7 +51,7 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
     ### print ('f1: ', f1)
     basename1 = os.path.splitext(os.path.basename(f1))[0]
     dir1 = os.path.join(output_dir_root, day1, basename1)
-    ### print ('dir1: ', dir1)
+    print ('dir1: ', dir1)
 
     if os.path.exists(dir1):
       shutil.rmtree(dir1)
@@ -78,9 +78,14 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
     print ('day_of_year: ', day_of_year)
     print ('day_of_year_p1: ', day_of_year_p1)
 
-    viirs_geo_files1 = sorted(glob.glob(viirs_dir+str(day_of_year_m1).zfill(3)+'/'+'VNP03MOD.*'+ext))
-    viirs_geo_files2 = sorted(glob.glob(viirs_dir+str(day_of_year).zfill(3)+'/'+'VNP03MOD.*'+ext))
-    viirs_geo_files3 = sorted(glob.glob(viirs_dir+str(day_of_year_p1).zfill(3)+'/'+'VNP03MOD.*'+ext))
+    if spacecraft == 'J1' or spacecraft == 'j1':
+      viirs_geo_files1 = sorted(glob.glob(viirs_dir+str(day_of_year_m1).zfill(3)+'/'+'VJ103MOD.*'+ext))
+      viirs_geo_files2 = sorted(glob.glob(viirs_dir+str(day_of_year).zfill(3)+'/'+'VJ103MOD.*'+ext))
+      viirs_geo_files3 = sorted(glob.glob(viirs_dir+str(day_of_year_p1).zfill(3)+'/'+'VJ103MOD.*'+ext))
+    else:
+      viirs_geo_files1 = sorted(glob.glob(viirs_dir+str(day_of_year_m1).zfill(3)+'/'+'VNP03MOD.*'+ext))
+      viirs_geo_files2 = sorted(glob.glob(viirs_dir+str(day_of_year).zfill(3)+'/'+'VNP03MOD.*'+ext))
+      viirs_geo_files3 = sorted(glob.glob(viirs_dir+str(day_of_year_p1).zfill(3)+'/'+'VNP03MOD.*'+ext))
 
     viirs_files = viirs_geo_files1+viirs_geo_files2+viirs_geo_files3
     """
@@ -131,7 +136,7 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1):
     ### sys.exit(0)
 
     # call colocation func
-    call_match_cris_viirs(cris_files, viirs_files_selected, dir1)
+    call_match_cris_viirs(cris_files, viirs_files_selected, dir1, spacecraft)
 
     # check to make sure that under dir1 there are the manifest and the index files
     cnt = len([name for name in os.listdir(dir1) if os.path.isfile(os.path.join(dir1, name))])
@@ -161,6 +166,7 @@ if __name__ == '__main__':
   parser.add_argument('--m', metavar='MONTH', type=int, required=True, help='month')
   parser.add_argument('--d1', metavar='START DAY', type=int, required=True, help='start day')
   parser.add_argument('--d2', metavar='END DAY', type=int, required=True, help='end day')
+  parser.add_argument('--sp', metavar='Spacecraft', type=str, const='SNPP', help='Spacecraft: SNPP or J1', nargs='?')
   parser.add_argument('--cr', metavar='CrIS Root Dir', type=str, const='/peate_archive/NPPOps/snpp/gdisc/2/', help='CrIS root dir', nargs='?')
   parser.add_argument('--vr', metavar='VIIRS Root Dir', type=str, const='/raid15/leipan/VIIRS/VNP03MOD/', help='VIIRS root dir', nargs='?')
   parser.add_argument('--pr', metavar='Product Root Dir', type=str, const='/raid15/leipan/products/20220616/', help='product root dir', nargs='?')
@@ -182,7 +188,7 @@ if __name__ == '__main__':
   cris_files = []
   viirs_files_selected = []
   dir1 = ''
-  call_match_cris_viirs(cris_files, viirs_files_selected, dir1)
+  call_match_cris_viirs(cris_files, viirs_files_selected, dir1, spacecraft)
   logger.info('Warning: there are {0} files under {1}, not 1 as expected!'.format(0, '/tmp/dir/'))
   sys.exit()
   """
@@ -192,6 +198,8 @@ if __name__ == '__main__':
   if chunk_size > args.c:
     chunk_size = args.c
 
+  if args.sp == None:
+    args.sp = 'SNPP'
   if args.pr == None:
     ### args.pr = '/raid15/leipan/products/20220117/'
     args.pr = '/raid15/leipan/products/20220616/'
@@ -207,15 +215,11 @@ if __name__ == '__main__':
   if os.path.exists(args.pr) == False:
     os.makedirs(args.pr)
 
+  ### sys.exit()
+
   ### viirs_geo_files = sorted(glob.glob(dataDir4+'VNP03MOD.*'+ext))
   ### print ('viirs_geo_files: ', viirs_geo_files)
  
-  """
-  cris_geo_files = sorted(glob.glob(args.cr+str(args.y)+'/**/**/crisl1b/SNDR.SNPP.CRIS*L1B.std*'+ext))
-  print ('cris_geo_files: ', cris_geo_files)
-  print ('len(cris_geo_files): ', len(cris_geo_files))
-  """
-
   month1 = str(args.m).zfill(2)
 
   PARALLEL = True
@@ -223,8 +227,14 @@ if __name__ == '__main__':
   for day in range (args.d1, args.d2+1):
     day1 = str(day).zfill(2)
     print('day1: ', day1)
-    print(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS')
-    cris_geo_files = sorted(glob.glob(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS*L1B.std*'+ext))
+
+    if args.sp == 'J1' or args.sp == 'j1':
+      print(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.J1.CRIS')
+      cris_geo_files = sorted(glob.glob(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.J1.CRIS*L1B.std*'+ext))
+    else:
+      print(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS')
+      cris_geo_files = sorted(glob.glob(args.cr+str(args.y)+'/'+month1+'/'+day1+'/'+'crisl1b/SNDR.SNPP.CRIS*L1B.std*'+ext))
+
     ### print ('cris_geo_files: ', cris_geo_files)
     print ('len(cris_geo_files): ', len(cris_geo_files))
 
@@ -235,9 +245,9 @@ if __name__ == '__main__':
       processes = []
       for cris_file in cris_files:
         if PARALLEL is False:
-          colocate_one_cris_granual(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1)
+          colocate_one_cris_granual(cris_file, args.vr+str(args.y)+'/', args.pr+'/'+str(args.y)+'/'+month1+'/', day1, args.sp)
         else:
-          p1 = Process(target=colocate_one_cris_granual, args=(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1))
+          p1 = Process(target=colocate_one_cris_granual, args=(cris_file, args.vr+str(args.y)+'/', args.pr+str(args.y)+'/'+month1+'/', day1, args.sp))
           processes.append(p1)
 
       if PARALLEL is True:
