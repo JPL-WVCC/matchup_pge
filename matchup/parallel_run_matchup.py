@@ -60,9 +60,9 @@ def colocate_one_cris_granual(cris_file, viirs_dir, output_dir_root, day1, space
     ### shutil.copyfile(f1, os.path.join(dir1, basename1+ext))
 
     f = nc4.Dataset(f1, 'r')
-    # 2017-10-01T00:00:00Z
-    starttime = datetime.strptime(f.time_coverage_start, '%Y-%m-%dT%H:%M:%SZ')
-    endtime = datetime.strptime(f.time_coverage_end, '%Y-%m-%dT%H:%M:%SZ')
+    # Handle both CrIS L1B v2 ('2017-10-01T00:00:00Z') and v3 ('2017-10-01T00:00:00.00Z') time formats
+    starttime = datetime.strptime(f.time_coverage_start.replace('.00Z', 'Z'), '%Y-%m-%dT%H:%M:%SZ')
+    endtime = datetime.strptime(f.time_coverage_end.replace('.00Z', 'Z'), '%Y-%m-%dT%H:%M:%SZ')
     print ('starttime: ', starttime, ' , endtime: ', endtime)
 
     # get the 3 consecutive days that span the cris date
