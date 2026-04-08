@@ -42,23 +42,19 @@ matchup_pge/
 
 ## Environment
 
-Production runs on AIRS/SIPS machines (`drought`, `freeze`, `typhoon`). **Do not
-run production on `weather2`** — it is a gateway machine only.
+Production is designed to run on a Linux compute node with shared NFS access
+to the input data archives and enough local storage for output products. A
+single month of AIRS/MODIS or CrIS/VIIRS production uses ~36 CPU cores for
+~3-4 hours.
 
 ### Python
 
 - Python 3.8+
 - Dependencies: `numpy`, `netCDF4`, `pyhdf`, `pykdtree`, `h5py`
 
-See [`requirements.txt`](requirements.txt). Lei Pan's anaconda3 environment at
-`~leipan/anaconda3` on AIRS/SIPS is pre-configured with all dependencies:
+See [`requirements.txt`](requirements.txt).
 
-```bash
-export PATH=/home/leipan/anaconda3/bin:$PATH
-python -c "import numpy, netCDF4, pyhdf, pykdtree, h5py; print('OK')"
-```
-
-If setting up a fresh environment:
+Setting up a fresh environment:
 
 ```bash
 conda create -n measures-wvcc python=3.8
@@ -69,14 +65,14 @@ pip install -r requirements.txt
 ### Companion code
 
 The two collocation library repos need to be accessible on `sys.path`. The
-production runners hard-code these paths at the top:
+production runners contain hard-coded paths near the top of the file:
 
 ```python
-sys.path.append('/home/leipan/pge/CrIS_VIIRS_collocation-master/')
-sys.path.append('/home/leipan/pge/AIRS_MODIS_collocation-master/')
+sys.path.append('/path/to/CrIS_VIIRS_collocation-master/')
+sys.path.append('/path/to/AIRS_MODIS_collocation-master/')
 ```
 
-Either keep them at those paths, or edit the runners to point at your clones.
+Edit these to point at your local clones.
 
 ## Input data
 
@@ -86,8 +82,8 @@ Either keep them at those paths, or edit the runners to point at your clones.
 | MODIS MYD03     | `/peate_archive/NPPOps/aqua_modis/laads/061/{YYYY}/{MM}/{DD}/aqua_modis_myd03/` |
 | SNPP CrIS L1B   | `/peate_archive/NPPOps/snpp/gdisc/2/{YYYY}/{MM}/{DD}/crisl1b/` |
 | J1 CrIS L1B     | `/peate_archive/NPPOps/jpss1/gdisc/3/{YYYY}/{MM}/{DD}/crisl1b/` (v3 required) |
-| SNPP VIIRS      | `/raid15/leipan/VIIRS/VNP03MOD/{YYYY}/{DOY}/` (download separately) |
-| J1 VIIRS        | `~/measures/VIIRS/VJ103MOD/{YYYY}/{DOY}/` (download separately) |
+| SNPP VIIRS      | `/path/to/VNP03MOD/{YYYY}/{DOY}/` (user-provided, download separately) |
+| J1 VIIRS        | `/path/to/VJ103MOD/{YYYY}/{DOY}/` (user-provided, download separately) |
 
 VIIRS geolocation is **not** available on AIRS/SIPS by default; see
 [Downloading VIIRS](#downloading-viirs-vj103mod--vnp03mod) below.
@@ -123,7 +119,7 @@ python parallel_run_matchup.py \
   --y 2020 --m 1 --d1 1 --d2 31 --sp SNPP \
   --pr /path/to/output/SNPP_CrIS-VIIRS/ \
   --cr /peate_archive/NPPOps/snpp/gdisc/2/ \
-  --vr /raid15/leipan/VIIRS/VNP03MOD/ \
+  --vr /path/to/VNP03MOD/ \
   --c 36
 ```
 
@@ -205,9 +201,9 @@ for that matchup.
 
 ## Production history
 
-- **2002-2022**: AIRS/MODIS initial production (Lei Pan)
-- **2015-2021**: SNPP CrIS/VIIRS initial production (Lei Pan)
-- **2018-2022**: J1 CrIS/VIIRS initial production (Lei Pan)
-- **2023-2025**: AIRS/MODIS and J1 CrIS/VIIRS extension (Gerald Manipon, 2026)
+- **2002-2022**: AIRS/MODIS initial production
+- **2015-2021**: SNPP CrIS/VIIRS initial production
+- **2018-2022**: J1 CrIS/VIIRS initial production
+- **2023-2025**: AIRS/MODIS and J1 CrIS/VIIRS extension
   - Added VJ103MOD download tooling (`scripts/download_viirs.py`)
   - Added CrIS v3 time format support to `parallel_run_matchup.py`
